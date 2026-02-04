@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import WeatherDetailView from './views/WeatherDetailView';
+import SoilDetailView from './views/SoilDetailView';
+import AlertsView from './views/AlertsView';
 import Header from './components/Header';
 import WeatherCard from './components/WeatherCard';
 import StatusRow from './components/StatusRow';
@@ -61,6 +63,10 @@ function App() {
       <div className="content">
         {activeTab === 'Weather' ? (
           <WeatherDetailView weather={weather} t={t} />
+        ) : activeTab === 'Soil' ? (
+          <SoilDetailView soilData={soil} t={t} />
+        ) : activeTab === 'Alerts' ? (
+          <AlertsView weather={weather} t={t} />
         ) : (
           <>
             <WeatherCard data={weather} t={t} />

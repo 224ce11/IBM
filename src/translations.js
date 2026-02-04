@@ -37,8 +37,31 @@ export const translations = {
         precipitation: "Precipitation",
         wind_speed: "Wind Speed",
         pressure: "Pressure",
-        visibility: "Visibility",
-        forecast_3h: "3-Hour Forecast"
+        soil_note: "Note: Recommendations are based on general soil properties.",
+        // Status Labels
+        "Dry": "Dry",
+        "Wet": "Wet",
+        "Acidic": "Acidic",
+        "Alkaline": "Alkaline",
+        "good": "Good",
+        // Alerts
+        "enable_notifications": "Enable Notifications",
+        "notify_desc": "Get notified about severe storms and rain",
+        "enable": "Enable",
+        "storm_alert": "Storm Alert",
+        "huricane_warning": "Hurricane Warning",
+        // SMS
+        "sms_alerts": "SMS Alerts",
+        "enter_phone": "Enter Phone Number",
+        "send_sms": "Send Test SMS",
+        "sms_sent": "SMS Sent!",
+
+        // Safety Tips
+        "safety_tips": "Safety Action Plan",
+        "action_required": "Precautionary Measures",
+        "tip_storm": "Dig drainage trenches to prevent waterlogging.",
+        "tip_wind": "Stake tall crops (Banana/Sugarcane) to prevent lodging.",
+        "tip_general": "Ensure crop insurance is active."
     },
     gu: {
         app_name: "સ્માર્ટ કિસાન",
@@ -79,6 +102,66 @@ export const translations = {
         wind_speed: "પવનની ગતિ",
         pressure: "દબાણ",
         visibility: "દૃશ્યતા",
-        forecast_3h: "3-કલાકની આગાહી"
+        forecast_3h: "3-કલાકની આગાહી",
+        // Soil Types
+        "Clay": "ચીકણી માટી",
+        "Sandy": "રેતાળ",
+        "Loam": "ગોરાડુ માટી",
+        "Sandy Loam": "રેતાળ ગોરાડુ",
+        "Silty Loam": "કાંપવાળી ગોરાડુ",
+        "Sandy Clay": "રેતાળ ચીકણી",
+        "Silty Clay": "કાંપવાળી ચીકણી",
+        "Unknown": "અજ્ઞાત",
+        // Soil Details
+        "sand": "રેતી",
+        "silt": "કાંપ",
+        "clay": "માટી", // or specific clay word
+        "texture": "જમીનનો પ્રકાર",
+
+        // Recommendations
+        "recommendations": "ભલામણો",
+        "recommended_crops": "ભલામણ કરેલ પાક",
+        "why": "કારણ",
+        "soil_note": "આ ભલામણો તમારી જમીનના સામાન્ય ગુણધર્મો પર આધારિત છે. વાવેતર કરતા પહેલા કૃષિ નિષ્ણાતની સલાહ લેવી.",
+
+        // Crops & Reasons
+        "Rice (Paddy)": "ડાંગર (ચોખા)", "Holds water well": "પાણી સારી રીતે જાળવી રાખે છે",
+        "Wheat": "ઘઉં", "Good for heavy soil": "ભારે જમીન માટે સારું",
+        "Broccoli/Cabbage": "બ્રોકોલી/કોબી", "Thrives in nutrient rich soil": "પોષકતત્વોથી ભરપૂર જમીનમાં સારો વિકાસ",
+        "Carrots": "ગાજર", "Needs loose soil": "ઢીલી જમીનની જરૂર છે",
+        "Potatoes": "બટાકા", "Tubers grow easily": "કંદમૂળ સરળતાથી ઉગે છે",
+        "Watermelon": "તરબૂચ", "Drains well": "પાણીનો નિકાલ સારો છે",
+        "Corn (Maize)": "મકાઈ", "High fertility": "વધુ ફળદ્રુપતા",
+        "Tomatoes": "ટામેટાં", "Holds moisture": "ભેજ જાળવી રાખે છે",
+        "Cotton": "કપાસ", "Needs rich soil": "સમૃદ્ધ જમીનની જરૂર છે",
+        "Sugarcane": "શેરડી", "Balanced nutrients": "સંતુલિત પોષક તત્વો",
+        "Vegetables": "શાકભાજી", "Optimum growth": "શ્રેષ્ઠ વૃદ્ધિ",
+        "Versatile soil": "વિવિધ પાક માટે અનુકૂળ",
+
+        // Simplified Status Labels
+        "Dry": "સૂકું",
+        "Wet": "ભીનું",
+        "Acidic": "એસિડિક",
+        "Alkaline": "ક્ષારયુક્ત",
+        "Good": "સારું",
+
+        // Alerts
+        "enable_notifications": "ચેતવણીઓ ચાલુ કરો",
+        "notify_desc": "વાવાઝોડા અને ભારે વરસાદની માહિતી મેળવો",
+        "enable": "ચાલુ કરો",
+        "storm_alert": "વાવાઝોડાની ચેતવણી",
+        "huricane_warning": "વાવાઝોડું આવવાની શક્યતા",
+        // SMS
+        "sms_alerts": "SMS ચેતવણીઓ",
+        "enter_phone": "ફોન નંબર દાખલ કરો",
+        "send_sms": "SMS મોકલો",
+        "sms_sent": "SMS મોકલાઈ ગયો!",
+
+        // Safety Tips
+        "safety_tips": "સુરક્ષા પગલાં",
+        "action_required": "જરૂરી સાવચેતી",
+        "tip_storm": "પાણી ભરાતું અટકાવવા માટે પાળા બાંધો.",
+        "tip_wind": "કેળ/શેરડી જેવા પાકને ટેકો આપો.",
+        "tip_general": "પાક વીમો સક્રિય છે કે નહીં તે તપાસો."
     }
 };
