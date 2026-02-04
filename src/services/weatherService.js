@@ -20,18 +20,36 @@ const getIcon = (condition) => {
 const fetchOpenWeather = async (lat, lon) => {
     if (!KEYS.OPEN_WEATHER || KEYS.OPEN_WEATHER.includes('your_')) throw new Error('No OpenWeather Key');
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${KEYS.OPEN_WEATHER}`;
-    const res = await axios.get(url);
-    const data = res.data;
+    // Parallel calls for current weather and forecast
+    const [weatherRes, forecastRes] = await Promise.all([
+        axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${KEYS.OPEN_WEATHER}`),
+        axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${KEYS.OPEN_WEATHER}`)
+    ]);
+
+    const data = weatherRes.data;
+    const forecastData = forecastRes.data;
+
+    // Process forecast: Take next 5 items (next 15 hours approx)
+    const forecast = forecastData.list.slice(0, 5).map(item => ({
+        time: new Date(item.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        temp: Math.round(item.main.temp),
+        icon: item.weather[0].main,
+        chanceOfRain: Math.round(item.pop * 100) // Probability of precipitation
+    }));
 
     return {
         temp: Math.round(data.main.temp),
+        feelsLines: Math.round(data.main.feels_like), // Real Feel
         condition: data.weather[0].main,
-        conditionLocal: data.weather[0].description, // Localize if needed via API lang param
+        conditionLocal: data.weather[0].description,
         humidity: data.main.humidity,
-        rainfall: data.rain ? data.rain['1h'] || 0 : 0, // OM gives rain in last 1h or 3h
-        windSpeed: Math.round(data.wind.speed * 3.6), // m/s to km/h
-        source: 'OpenWeather'
+        rainfall: data.rain ? data.rain['1h'] || 0 : 0,
+        windSpeed: Math.round(data.wind.speed * 3.6),
+        pressure: data.main.pressure,
+        visibility: data.visibility / 1000, // km
+        locationName: data.name,
+        source: 'OpenWeather',
+        forecast: forecast
     };
 };
 
@@ -50,6 +68,7 @@ const fetchWeatherAPI = async (lat, lon) => {
         humidity: data.current.humidity,
         rainfall: data.current.precip_mm,
         windSpeed: Math.round(data.current.wind_kph),
+        locationName: data.location.name,
         source: 'WeatherAPI'
     };
 };
@@ -75,6 +94,7 @@ const fetchStormGlass = async (lat, lon) => {
         humidity: Math.round(current.humidity.sg),
         rainfall: current.precipitation.sg,
         windSpeed: Math.round(current.windSpeed.sg * 3.6),
+        locationName: 'StormGlass Location',
         source: 'StormGlass'
     };
 };
@@ -107,7 +127,10 @@ export const fetchWeatherData = async (lat, lon) => {
                     humidity: 65,
                     rainfall: 2,
                     windSpeed: 12,
-                    source: 'Mock Data'
+                    locationName: 'Nashik (Mock)',
+                    source: 'Mock Data',
+                    feelsLike: 34,
+                    forecast: []
                 };
             }
         }

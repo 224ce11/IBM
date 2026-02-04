@@ -2,13 +2,13 @@ import React from 'react';
 import { CloudSun, Droplets, CloudRain, Wind } from 'lucide-react';
 import './WeatherCard.css';
 
-const WeatherCard = ({ data }) => {
-    if (!data) return <div className="weather-card loading">Loading...</div>;
+const WeatherCard = ({ data, t }) => {
+    if (!data) return <div className="weather-card loading">{t('loading')}</div>;
 
     return (
         <div className="weather-card">
             <div className="weather-header">
-                <span>Today's Weather</span>
+                <span>{t('todays_weather')}</span>
                 <CloudSun size={48} className="main-weather-icon" />
             </div>
 
@@ -19,18 +19,21 @@ const WeatherCard = ({ data }) => {
 
             <div className="condition">
                 {data.condition} / {data.conditionLocal}
+                <div style={{ fontSize: '0.8rem', opacity: 0.7, marginTop: '4px' }}>
+                    {t('source')}: {data.source}
+                </div>
             </div>
 
             <div className="weather-stats">
                 <div className="stat-item">
                     <Droplets size={20} />
                     <span className="stat-value">{data.humidity}%</span>
-                    <span className="stat-label">Humidity</span>
+                    <span className="stat-label">{t('humidity')}</span>
                 </div>
                 <div className="stat-item">
                     <CloudRain size={20} />
                     <span className="stat-value">{data.rainfall}mm</span>
-                    <span className="stat-label">Rainfall</span>
+                    <span className="stat-label">{t('rainfall')}</span>
                 </div>
                 <div className="stat-item">
                     <Wind size={20} />

@@ -2,23 +2,23 @@ import React from 'react';
 import { Leaf, MapPin, Globe } from 'lucide-react';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ location, t, toggleLang }) => {
     return (
         <header className="header">
             <div className="header-top">
                 <div className="logo-section">
                     <Leaf className="logo-icon" size={24} color="#4CAF50" />
                     <div>
-                        <h1 className="app-name">Smart Farmer</h1>
+                        <h1 className="app-name">{t('app_name')}</h1>
                         <div className="location">
                             <MapPin size={12} />
-                            <span>Nashik, Maharashtra</span>
+                            <span>{location || t('detecting_loc')}</span>
                         </div>
                     </div>
                 </div>
-                <button className="lang-btn">
+                <button className="lang-btn" onClick={toggleLang}>
                     <Globe size={16} />
-                    <span>हिंदी</span>
+                    <span>{t('lang_btn')}</span>
                 </button>
             </div>
         </header>

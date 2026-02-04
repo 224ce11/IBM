@@ -3,17 +3,17 @@ import { CheckCircle, Clock, ArrowRight } from 'lucide-react';
 import './CardStyles.css';
 import './ActionList.css';
 
-const ActionList = () => {
+const ActionList = ({ t }) => {
     const actions = [
-        { id: 1, text: 'Water crops in the morning', icon: 'droplet' },
-        { id: 2, text: 'Check fungal signs', icon: 'search' },
+        { id: 1, text: t('action_1'), icon: 'droplet' },
+        { id: 2, text: t('action_2'), icon: 'search' },
     ];
 
     return (
         <div className="card-container">
             <h3 className="card-title">
                 <CheckCircle size={18} color="#4CAF50" />
-                Today's Action
+                {t('todays_action')}
             </h3>
 
             <div className="action-list">

@@ -1,8 +1,9 @@
 .status-row {
     display: flex;
     gap: 16px;
-    padding: 0 20px;
-    margin-bottom: 20px;
+    /* padding removed to fit grid */
+    margin-bottom: 0;
+    /* Let grid gap handle spacing */
 }
 
 .status-card {

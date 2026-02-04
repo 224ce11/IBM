@@ -2,24 +2,35 @@ import React from 'react';
 import { Sprout, Droplet, FlaskConical } from 'lucide-react';
 import './CardStyles.css'; // Shared styles for cards
 
-const SoilHealth = () => {
+const SoilHealth = ({ t, soilData }) => {
+    // Default values while loading
+    const data = soilData || {
+        moisture: 'Loading...', // Or fetch from weather
+        ph: '7.0',
+        nitrogen: '0.1%',
+        organicCarbon: '1.2%',
+        type: 'Fetching...'
+    };
+
     return (
         <div className="card-container">
             <h3 className="card-title">
                 <Sprout size={18} color="#795548" />
-                Soil Health
+                {t('soil_health')} - <span style={{ fontSize: '0.8rem', fontWeight: 400 }}>{data.type}</span>
             </h3>
 
             <div className="metric-row">
                 <div className="metric-header">
                     <div className="metric-label">
                         <Droplet size={14} className="icon-blue" />
-                        <span>Moisture</span>
+                        <span>{t('moisture')}</span>
                     </div>
-                    <span className="metric-value">72% <span className="tag tag-green">High</span></span>
+                    {/* Fake moisture logic: if data is loading, show text, else show number */}
+                    <span className="metric-value">{data.moisture}</span>
                 </div>
+                {/* Remove bar if text is 'Loading' or non-numeric */}
                 <div className="progress-bg">
-                    <div className="progress-fill fill-blue" style={{ width: '72%' }}></div>
+                    <div className="progress-fill fill-blue" style={{ width: data.moisture === 'Loading...' ? '0%' : (parseInt(data.moisture) || 50) + '%' }}></div>
                 </div>
             </div>
 
@@ -27,23 +38,20 @@ const SoilHealth = () => {
                 <div className="metric-header">
                     <div className="metric-label">
                         <FlaskConical size={14} className="icon-purple" />
-                        <span>pH Level</span>
+                        <span>{t('ph_level')}</span>
                     </div>
-                    <span className="metric-value">6.8 <span className="tag tag-gray">Neutral</span></span>
+                    <span className="metric-value">{data.ph} <span className="tag tag-gray">{t('neutral')}</span></span>
                 </div>
-                {/* pH usually doesn't need a 0-100 bar, but maybe a scale. Image shows just text? 
-            Looking at image, there is a bar for pH? Hard to see. 
-            Actually, the image has Moisture bar. 
-            Let's assume text for pH or a small indicator. 
-            Wait, I should check the image description again.
-            "Moisture ... 72% High ... [Bar]"
-            "pH Level ... 6.8 Neutral" (maybe no bar, or just text).
-            I'll stick to text for pH to keep it clean unless I see a bar in my mind's eye.
-        */}
+
+                <div className="metric-header" style={{ marginTop: '12px' }}>
+                    <div className="metric-label">
+                        <span style={{ fontSize: '12px' }}>Nitrogen</span>
+                    </div>
+                    <span className="metric-value">{data.nitrogen}</span>
+                </div>
             </div>
         </div>
-    ); // Wait, looking closely at the crop health, there is a bar. Soil health probably has one too or visually similar.
-    // I'll add a simple visual if needed, but text is fine.
+    );
 };
 
 export default SoilHealth;

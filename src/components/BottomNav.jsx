@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Home, CloudSun, Sprout, Bell } from 'lucide-react';
 import './BottomNav.css';
 
-const BottomNav = () => {
-    const [active, setActive] = useState('Home');
+const BottomNav = ({ t, activeTab, setActiveTab }) => {
+    // const [active, setActive] = useState('Home'); // Lifted to App.jsx
 
     const navItems = [
-        { name: 'Home', icon: Home },
-        { name: 'Weather', icon: CloudSun },
-        { name: 'Soil', icon: Sprout },
-        { name: 'Alerts', icon: Bell }
+        { name: 'Home', label: t('nav_home'), icon: Home },
+        { name: 'Weather', label: t('nav_weather'), icon: CloudSun },
+        { name: 'Soil', label: t('nav_soil'), icon: Sprout },
+        { name: 'Alerts', label: t('nav_alerts'), icon: Bell }
     ];
 
     return (
@@ -17,13 +17,13 @@ const BottomNav = () => {
             {navItems.map((item) => (
                 <button
                     key={item.name}
-                    className={`nav-item ${active === item.name ? 'active' : ''}`}
-                    onClick={() => setActive(item.name)}
+                    className={`nav-item ${activeTab === item.name ? 'active' : ''}`}
+                    onClick={() => setActiveTab(item.name)}
                 >
-                    <div className={`icon-container ${active === item.name ? 'active-bg' : ''}`}>
-                        <item.icon size={20} className={active === item.name ? 'icon-active' : 'icon-inactive'} />
+                    <div className={`icon-container ${activeTab === item.name ? 'active-bg' : ''}`}>
+                        <item.icon size={20} className={activeTab === item.name ? 'icon-active' : 'icon-inactive'} />
                     </div>
-                    <span className="nav-label">{item.name}</span>
+                    <span className="nav-label">{item.label}</span>
                 </button>
             ))}
         </div>
