@@ -120,6 +120,9 @@ export const fetchWeatherData = async (lat, lon) => {
                 console.error('All APIs failed. Returning mock data.', err3.message);
 
                 // Final Fallback: Mock Data (so app doesn't break)
+                // Final Fallback: Mock Data (so app doesn't break)
+                const isQuotaError = [err1, err2, err3].some(e => e?.response?.status === 429 || e?.response?.status === 401);
+
                 return {
                     temp: 32,
                     condition: 'Partly Cloudy',
@@ -127,7 +130,7 @@ export const fetchWeatherData = async (lat, lon) => {
                     humidity: 65,
                     rainfall: 2,
                     windSpeed: 12,
-                    locationName: 'Nashik (Mock)',
+                    locationName: isQuotaError ? 'Demo Mode (API Limit)' : 'Demo Mode (Network/API Error)',
                     source: 'Mock Data',
                     feelsLike: 34,
                     forecast: []

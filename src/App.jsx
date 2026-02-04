@@ -45,14 +45,20 @@ function App() {
           // Fallback to default
           fetchWeatherData(defaultLat, defaultLon).then((data) => {
             console.log("⚠️ Using Default Location Data:", data);
-            setWeather(data);
+            setWeather({
+              ...data,
+              locationName: `${data.locationName} (Default)`
+            });
           });
         }
       );
     } else {
       fetchWeatherData(defaultLat, defaultLon).then((data) => {
         console.log("⚠️ Geolocation not supported, used default:", data);
-        setWeather(data);
+        setWeather({
+          ...data,
+          locationName: `${data.locationName} (GPS Unsupported)`
+        });
       });
     }
   }, []);
