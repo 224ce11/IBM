@@ -1,0 +1,64 @@
+:root {
+  --primary-green: #34C759;
+  --primary-blue: #30B0C7; /* Closer to the image's blue gradient start */
+  --blue-gradient-start: #29B6F6;
+  --blue-gradient-end: #0288D1;
+  --bg-color: #F5F7FA;
+  --card-bg: #FFFFFF;
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+.container {
+  max-width: 480px; /* Mobile-first/Phone view as seen in screenshot */
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  padding-bottom: 80px; /* Space for footer */
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
