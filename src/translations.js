@@ -61,7 +61,10 @@ export const translations = {
         "action_required": "Precautionary Measures",
         "tip_storm": "Dig drainage trenches to prevent waterlogging.",
         "tip_wind": "Stake tall crops (Banana/Sugarcane) to prevent lodging.",
-        "tip_general": "Ensure crop insurance is active."
+        "tip_general": "Ensure crop insurance is active.",
+        "search_placeholder": "Search city...",
+        "demo_mode": "Demo Mode",
+        "api_limit_warning": "API limits reached. Using fallback data."
     },
     gu: {
         app_name: "સ્માર્ટ કિસાન",
@@ -162,6 +165,9 @@ export const translations = {
         "action_required": "જરૂરી સાવચેતી",
         "tip_storm": "પાણી ભરાતું અટકાવવા માટે પાળા બાંધો.",
         "tip_wind": "કેળ/શેરડી જેવા પાકને ટેકો આપો.",
-        "tip_general": "પાક વીમો સક્રિય છે કે નહીં તે તપાસો."
+        "tip_general": "પાક વીમો સક્રિય છે કે નહીં તે તપાસો.",
+        "search_placeholder": "શહેર શોધો...",
+        "demo_mode": "ડેમો મોડ",
+        "api_limit_warning": "API મર્યાદા પૂરી થઈ ગઈ છે. વૈકલ્પિક માહિતી બતાવી રહ્યા છીએ."
     }
 };

@@ -39,7 +39,7 @@ const fetchOpenWeather = async (lat, lon) => {
 
     return {
         temp: Math.round(data.main.temp),
-        feelsLines: Math.round(data.main.feels_like), // Real Feel
+        feelsLike: Math.round(data.main.feels_like), // Real Feel
         condition: data.weather[0].main,
         conditionLocal: data.weather[0].description,
         humidity: data.main.humidity,
@@ -99,6 +99,72 @@ const fetchStormGlass = async (lat, lon) => {
     };
 };
 
+// 4. Open-Meteo Implementation (Free, No Key)
+const fetchOpenMeteo = async (lat, lon) => {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,surface_pressure,wind_speed_10m,apparent_temperature,visibility&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto`;
+    const res = await axios.get(url);
+    const data = res.data;
+    const current = data.current;
+
+    // Open-Meteo WMO Weather interpretation
+    const getCondition = (code) => {
+        if (code === 0) return 'Clear';
+        if (code >= 1 && code <= 3) return 'Partly Cloudy';
+        if (code >= 45 && code <= 48) return 'Foggy';
+        if (code >= 51 && code <= 67) return 'Rain';
+        if (code >= 71 && code <= 77) return 'Snow';
+        if (code >= 80 && code <= 82) return 'Showers';
+        if (code >= 95 && code <= 99) return 'Thunderstorm';
+        return 'Unknown';
+    };
+
+    // Process forecast
+    const forecast = data.daily.time.slice(0, 5).map((time, index) => ({
+        time: new Date(time).toLocaleDateString([], { weekday: 'short' }),
+        temp: Math.round(data.daily.temperature_2m_max[index]),
+        icon: getCondition(data.daily.weather_code[index]),
+        chanceOfRain: data.daily.precipitation_sum[index] > 0 ? 50 : 0 // Rough estimate
+    }));
+
+    return {
+        temp: Math.round(current.temperature_2m),
+        condition: getCondition(current.weather_code),
+        conditionLocal: getCondition(current.weather_code),
+        humidity: current.relative_humidity_2m,
+        rainfall: current.precipitation,
+        windSpeed: Math.round(current.wind_speed_10m),
+        pressure: current.surface_pressure,
+        locationName: 'Unknown Location (Open-Meteo)',
+        source: 'Open-Meteo (Free)',
+        feelsLike: Math.round(current.apparent_temperature),
+        visibility: (current.visibility / 1000).toFixed(1), // km
+        forecast: forecast
+    };
+};
+
+export const fetchCoordinates = async (city) => {
+    try {
+        // Use Open-Meteo Geocoding (Free)
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`;
+        const res = await axios.get(url);
+
+        if (!res.data.results || res.data.results.length === 0) {
+            throw new Error('City not found');
+        }
+
+        const location = res.data.results[0];
+        return {
+            lat: location.latitude,
+            lon: location.longitude,
+            name: location.name,
+            country: location.country
+        };
+    } catch (error) {
+        console.error("Geocoding failed:", error);
+        throw error;
+    }
+};
+
 // Main Fetch Function with Fallback Strategy
 export const fetchWeatherData = async (lat, lon) => {
     console.log(`Fetching weather for ${lat}, ${lon}...`);
@@ -117,24 +183,29 @@ export const fetchWeatherData = async (lat, lon) => {
                 // Priority 3: StormGlass
                 return await fetchStormGlass(lat, lon);
             } catch (err3) {
-                console.error('All APIs failed. Returning mock data.', err3.message);
+                console.warn('StormGlass failed, trying Open-Meteo...', err3.message);
+                try {
+                    // Priority 4: Open-Meteo (Free Fallback)
+                    return await fetchOpenMeteo(lat, lon);
+                } catch (err4) {
+                    console.error('All APIs failed. Returning mock data.', err4.message);
 
-                // Final Fallback: Mock Data (so app doesn't break)
-                // Final Fallback: Mock Data (so app doesn't break)
-                const isQuotaError = [err1, err2, err3].some(e => e?.response?.status === 429 || e?.response?.status === 401);
+                    const isQuotaError = [err1, err2, err3].some(e => e?.response?.status === 429 || e?.response?.status === 401);
 
-                return {
-                    temp: 32,
-                    condition: 'Partly Cloudy',
-                    conditionLocal: 'API Unavailable',
-                    humidity: 65,
-                    rainfall: 2,
-                    windSpeed: 12,
-                    locationName: isQuotaError ? 'Demo Mode (API Limit)' : 'Demo Mode (Network/API Error)',
-                    source: 'Mock Data',
-                    feelsLike: 34,
-                    forecast: []
-                };
+                    return {
+                        temp: 32,
+                        condition: 'Partly Cloudy',
+                        conditionLocal: 'API Unavailable',
+                        humidity: 65,
+                        rainfall: 2,
+                        windSpeed: 12,
+                        locationName: isQuotaError ? 'Demo Mode (API Limit)' : 'Demo Mode (Network/API Error)',
+                        source: 'Mock Data',
+                        feelsLike: 34,
+                        visibility: 10,
+                        forecast: []
+                    };
+                }
             }
         }
     }

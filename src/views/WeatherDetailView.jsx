@@ -18,7 +18,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         <Thermometer size={20} className="icon-blue" />
                         <div>
                             <span className="detail-label">{t('feels_like')}</span>
-                            <span className="detail-value">{weather.feelsLines}°C</span>
+                            <span className="detail-value">{weather.feelsLike}°C</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -59,24 +59,26 @@ const WeatherDetailView = ({ weather, t }) => {
                 </div>
             </div>
 
-            {weather.forecast && weather.forecast.length > 0 && (
-                <div className="card-container">
-                    <h3 className="card-title">{t('forecast_3h')}</h3>
-                    <div className="forecast-list">
-                        {weather.forecast.map((item, index) => (
-                            <div key={index} className="forecast-item">
-                                <span className="f-time">{item.time}</span>
-                                <span className="f-icon">{item.icon}</span>
-                                <span className="f-temp">{item.temp}°C</span>
-                                <span className="f-rain">
-                                    <Droplet size={12} /> {item.chanceOfRain}%
-                                </span>
-                            </div>
-                        ))}
+            {
+                weather.forecast && weather.forecast.length > 0 && (
+                    <div className="card-container">
+                        <h3 className="card-title">{t('forecast_3h')}</h3>
+                        <div className="forecast-list">
+                            {weather.forecast.map((item, index) => (
+                                <div key={index} className="forecast-item">
+                                    <span className="f-time">{item.time}</span>
+                                    <span className="f-icon">{item.icon}</span>
+                                    <span className="f-temp">{item.temp}°C</span>
+                                    <span className="f-rain">
+                                        <Droplet size={12} /> {item.chanceOfRain}%
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 
