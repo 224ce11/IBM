@@ -8,9 +8,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['logo.png'],
+      includeAssets: ['logo.png', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        id: '/',
         name: 'Smart Farmer',
         short_name: 'SmartFarmer',
         description: 'AI-powered farming dashboard',
@@ -20,7 +19,6 @@ export default defineConfig({
         orientation: 'portrait',
         scope: '/',
         start_url: '/',
-        categories: ['productivity', 'education'],
         icons: [
           {
             src: 'logo.png',
@@ -46,6 +44,7 @@ export default defineConfig({
         enabled: true
       }
     })
+
 
 
 

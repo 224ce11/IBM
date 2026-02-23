@@ -4,8 +4,17 @@ import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import App from './App.jsx'
 
-// Register PWA service worker
-registerSW({ immediate: true })
+// Register PWA service worker with reload on update
+const updateSW = registerSW({
+  onNeedRefresh() {
+    if (confirm('New content available. Reload?')) {
+      updateSW(true)
+    }
+  },
+  onOfflineReady() {
+    console.log('App ready to work offline')
+  },
+})
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
