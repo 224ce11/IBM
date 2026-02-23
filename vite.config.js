@@ -9,6 +9,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['vite.svg'],
+      devOptions: {
+        enabled: true
+      },
       manifest: {
         name: 'Smart Farmer Dashboard',
         short_name: 'SmartFarmer',
@@ -20,18 +23,25 @@ export default defineConfig({
         icons: [
           {
             src: 'vite.svg',
-            sizes: 'any',
+            sizes: '192x192',
             type: 'image/svg+xml',
             purpose: 'any'
           },
           {
             src: 'vite.svg',
-            sizes: 'any',
+            sizes: '512x512',
+            type: 'image/svg+xml',
+            purpose: 'any'
+          },
+          {
+            src: 'vite.svg',
+            sizes: '512x512',
             type: 'image/svg+xml',
             purpose: 'maskable'
           }
         ]
       }
+
     })
 
 
