@@ -64,7 +64,13 @@ export const translations = {
         "tip_general": "Ensure crop insurance is active.",
         "search_placeholder": "Search city...",
         "demo_mode": "Demo Mode",
-        "api_limit_warning": "API limits reached. Using fallback data."
+        "api_limit_warning": "API limits reached. Using fallback data.",
+        "install_app": "Install App",
+        "install_desc": "Get the best experience on your phone",
+        "install_btn": "Install Now",
+        "ios_install_title": "Install on iPhone",
+        "ios_install_step1": "1. Tap the Share button in Safari",
+        "ios_install_step2": "2. Select 'Add to Home Screen'"
     },
     gu: {
         app_name: "સ્માર્ટ કિસાન",
@@ -168,6 +174,12 @@ export const translations = {
         "tip_general": "પાક વીમો સક્રિય છે કે નહીં તે તપાસો.",
         "search_placeholder": "શહેર શોધો...",
         "demo_mode": "ડેમો મોડ",
-        "api_limit_warning": "API મર્યાદા પૂરી થઈ ગઈ છે. વૈકલ્પિક માહિતી બતાવી રહ્યા છીએ."
+        "api_limit_warning": "API મર્યાદા પૂરી થઈ ગઈ છે. વૈકલ્પિક માહિતી બતાવી રહ્યા છીએ.",
+        "install_app": "એપ્લિકેશન ઇન્સ્ટોલ કરો",
+        "install_desc": "તમારા ફોન પર શ્રેષ્ઠ અનુભવ મેળવો",
+        "install_btn": "હમણાં ઇન્સ્ટોલ કરો",
+        "ios_install_title": "iPhone પર ઇન્સ્ટોલ કરો",
+        "ios_install_step1": "1. સફારીમાં શેર બટન પર ટેપ કરો",
+        "ios_install_step2": "2. 'હોમ સ્ક્રીન પર ઉમેરો' પસંદ કરો"
     }
 };

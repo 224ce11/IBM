@@ -14,6 +14,8 @@ import { translations } from './translations';
 import './App.css';
 import { fetchSoilData } from './services/soilService';
 import { AlertCircle } from 'lucide-react';
+import InstallPrompt from './components/InstallPrompt';
+
 
 function App() {
   const [weather, setWeather] = useState(() => {
@@ -136,6 +138,7 @@ function App() {
         )}
       </div>
       <BottomNav t={t} activeTab={activeTab} setActiveTab={setActiveTab} />
+      <InstallPrompt t={t} />
     </div>
   );
 }
