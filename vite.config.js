@@ -12,7 +12,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['logo.png', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      injectRegister: 'auto',
+      includeAssets: ['logo.png', 'favicon.ico', 'apple-touch-icon.png'],
       manifest: {
         name: 'Smart Farmer',
         short_name: 'SmartFarmer',
@@ -20,27 +21,17 @@ export default defineConfig({
         theme_color: '#2e7d32',
         background_color: '#ffffff',
         display: 'standalone',
-        orientation: 'portrait',
-        scope: '/',
         start_url: '/',
         icons: [
           {
             src: 'logo.png',
             sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any'
+            type: 'image/png'
           },
           {
             src: 'logo.png',
             sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any'
-          },
-          {
-            src: 'logo.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable'
+            type: 'image/png'
           }
         ]
       },
@@ -48,6 +39,7 @@ export default defineConfig({
         enabled: true
       }
     })
+
 
 
 
