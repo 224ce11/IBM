@@ -8,41 +8,42 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['vite.svg'],
-      devOptions: {
-        enabled: true
-      },
+      includeAssets: ['logo.png'],
       manifest: {
-        name: 'Smart Farmer Dashboard',
+        name: 'Smart Farmer',
         short_name: 'SmartFarmer',
-        description: 'AI-powered farming dashboard for soil and weather insights',
+        description: 'AI-powered farming dashboard',
         theme_color: '#2e7d32',
         background_color: '#ffffff',
         display: 'standalone',
+        scope: '/',
         start_url: '/',
         icons: [
           {
-            src: 'vite.svg',
+            src: 'logo.png',
             sizes: '192x192',
-            type: 'image/svg+xml',
-            purpose: 'any'
+            type: 'image/png'
           },
           {
-            src: 'vite.svg',
+            src: 'logo.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
-            purpose: 'any'
+            type: 'image/png'
           },
           {
-            src: 'vite.svg',
+            src: 'logo.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
-            purpose: 'maskable'
+            type: 'image/png',
+            purpose: 'any maskable'
           }
         ]
+      },
+      devOptions: {
+        enabled: true
       }
-
     })
+
+
+
 
 
   ],

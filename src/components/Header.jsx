@@ -36,7 +36,7 @@ const Header = ({ location, t, toggleLang, onSearch }) => {
                 ) : (
                     <>
                         <div className="logo-section">
-                            <Leaf className="logo-icon" size={24} color="#4CAF50" />
+                            <img src="/logo.png" alt="Leaf Logo" className="logo-img" />
                             <div>
                                 <h1 className="app-name">{t('app_name')}</h1>
                                 <div className="location" onClick={() => setIsSearching(true)}>

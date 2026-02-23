@@ -62,7 +62,7 @@ const InstallPrompt = ({ t }) => {
         <div className="install-prompt animate-slide-up">
             <div className="install-content">
                 <div className="install-icon">
-                    <Download size={24} color="#fff" />
+                    <img src="/logo.png" alt="App Logo" className="logo-img-small" />
                 </div>
                 <div className="install-text">
                     <h3>{t('install_app')}</h3>

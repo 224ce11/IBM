@@ -1,0 +1,21 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="leafGrad" x1="150" y1="150" x2="250" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#81C784" />
+      <stop offset="100%" stop-color="#2E7D32" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="100" fill="#F8F9FA" />
+  <path d="M240 430C240 430 145 380 145 250C145 120 240 90 240 90V430Z" fill="url(#leafGrad)" />
+  <path d="M240 90C240 90 195 150 195 250C195 350 240 430 240 430" stroke="white" stroke-width="6" fill="none" opacity="0.6" />
+  <path d="M195 250L160 220M205 320L170 290M215 180L185 160" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.4" />
+  <g stroke="#FB8C00" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="330" cy="180" r="35" stroke-width="10" />
+    <path d="M330 115V130M330 230V245M395 180H380M265 180H280M378 132L368 142M282 228L292 218M378 228L368 218M282 132L292 142" stroke-width="8" />
+    <path d="M255 435C270 410 320 400 350 400C390 400 410 360 410 340" />
+    <circle cx="410" cy="340" r="10" fill="#FB8C00" stroke="none" />
+    <path d="M255 435C280 400 330 350 330 350C380 300 330 270 330 225" />
+    <path d="M255 435C255 410 265 310 305 260" />
+    <circle cx="305" cy="260" r="10" fill="#FB8C00" stroke="none" />
+  </g>
+</svg>

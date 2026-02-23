@@ -15,6 +15,7 @@ import './App.css';
 import { fetchSoilData } from './services/soilService';
 import { AlertCircle } from 'lucide-react';
 import InstallPrompt from './components/InstallPrompt';
+import LoadingScreen from './components/LoadingScreen';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
   const [lang, setLang] = useState(() => localStorage.getItem('appLang') || 'en');
   const [activeTab, setActiveTab] = useState('Home');
   const [isLoading, setIsLoading] = useState(false);
+  const [isAppLoading, setIsAppLoading] = useState(true);
 
   const t = (key) => translations[lang][key] || key;
 
@@ -64,46 +66,73 @@ function App() {
   };
 
   useEffect(() => {
-    // If we have saved coordinates, refresh them
-    const savedCoords = localStorage.getItem('lastCoords');
-    if (savedCoords) {
-      const { lat, lon } = JSON.parse(savedCoords);
-      fetchWeatherData(lat, lon).then(setWeather);
-      fetchSoilData(lat, lon).then(setSoil);
-      return;
-    }
+    const loadData = async () => {
+      // If we have saved coordinates, refresh them
+      const savedCoords = localStorage.getItem('lastCoords');
+      const defaultLat = 19.9975;
+      const defaultLon = 73.7898;
 
-    // Default location (Nashik)
-    const defaultLat = 19.9975;
-    const defaultLon = 73.7898;
+      try {
+        if (savedCoords) {
+          const { lat, lon } = JSON.parse(savedCoords);
+          await Promise.all([
+            fetchWeatherData(lat, lon).then(setWeather),
+            fetchSoilData(lat, lon).then(setSoil)
+          ]);
+        } else if (navigator.geolocation) {
+          // Wrap geolocation in a promise to handle it within async flow
+          const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
+          }).catch(err => {
+            console.warn("Geolocation failed or timed out", err);
+            return null;
+          });
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          fetchWeatherData(latitude, longitude).then((data) => {
-            setWeather(data);
-            localStorage.setItem('lastWeather', JSON.stringify(data));
-          });
-          fetchSoilData(latitude, longitude).then((data) => {
-            setSoil(data);
-            localStorage.setItem('lastSoil', JSON.stringify(data));
-          });
-          localStorage.setItem('lastCoords', JSON.stringify({ lat: latitude, lon: longitude }));
-        },
-        (error) => {
-          console.log("Geolocation error:", error);
-          if (!weather) { // Only fallback if no saved data
-            fetchWeatherData(defaultLat, defaultLon).then(setWeather);
-            fetchSoilData(defaultLat, defaultLon).then(setSoil);
+          if (position) {
+            const { latitude, longitude } = position.coords;
+            const [wData, sData] = await Promise.all([
+              fetchWeatherData(latitude, longitude),
+              fetchSoilData(latitude, longitude)
+            ]);
+            setWeather(wData);
+            setSoil(sData);
+            localStorage.setItem('lastWeather', JSON.stringify(wData));
+            localStorage.setItem('lastSoil', JSON.stringify(sData));
+            localStorage.setItem('lastCoords', JSON.stringify({ lat: latitude, lon: longitude }));
+          } else {
+            // Fallback inside geolocation path
+            const [wData, sData] = await Promise.all([
+              fetchWeatherData(defaultLat, defaultLon),
+              fetchSoilData(defaultLat, defaultLon)
+            ]);
+            setWeather(wData);
+            setSoil(sData);
           }
+        } else {
+          // No geolocation support
+          const [wData, sData] = await Promise.all([
+            fetchWeatherData(defaultLat, defaultLon),
+            fetchSoilData(defaultLat, defaultLon)
+          ]);
+          setWeather(wData);
+          setSoil(sData);
         }
-      );
-    } else if (!weather) {
-      fetchWeatherData(defaultLat, defaultLon).then(setWeather);
-      fetchSoilData(defaultLat, defaultLon).then(setSoil);
-    }
+      } catch (error) {
+        console.error("Initialization error:", error);
+      } finally {
+        // Minimum loading time for animation to feel good
+        setTimeout(() => {
+          setIsAppLoading(false);
+        }, 2000);
+      }
+    };
+
+    loadData();
   }, []);
+
+  if (isAppLoading) {
+    return <LoadingScreen t={t} />;
+  }
 
   return (
     <div className="container" style={{ opacity: isLoading ? 0.7 : 1, transition: 'opacity 0.3s' }}>

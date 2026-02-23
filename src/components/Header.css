@@ -16,9 +16,16 @@
     gap: 12px;
 }
 
-.logo-icon {
-    fill: #E8F5E9;
-    /* Light green background fill effect if using specific icon style, otherwise simple color */
+.logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.logo-img:hover {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .app-name {
