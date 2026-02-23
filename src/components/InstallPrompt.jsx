@@ -8,16 +8,25 @@ const InstallPrompt = ({ t }) => {
     const [isIos, setIsIos] = useState(false);
 
     useEffect(() => {
-        // Check if it's iOS
-        const isIosDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        // Advanced iOS detection (includes modern iPads)
+        const isIosDevice = [
+            'iPad Simulator',
+            'iPhone Simulator',
+            'iPod Simulator',
+            'iPad',
+            'iPhone',
+            'iPod'
+        ].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 
         if (isIosDevice && !isStandalone) {
             setIsIos(true);
             // Show iOS prompt after a short delay
-            const timer = setTimeout(() => setIsVisible(true), 3000);
+            const timer = setTimeout(() => setIsVisible(true), 2000);
             return () => clearTimeout(timer);
         }
+
 
         const handleBeforeInstallPrompt = (e) => {
             // Prevent Chrome 67 and earlier from automatically showing the prompt
