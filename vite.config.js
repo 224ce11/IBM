@@ -10,15 +10,17 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.png'],
       manifest: {
-        id: 'smart-farmer-pwa-v1',
+        id: '/',
         name: 'Smart Farmer',
         short_name: 'SmartFarmer',
         description: 'AI-powered farming dashboard',
         theme_color: '#2e7d32',
         background_color: '#ffffff',
         display: 'standalone',
+        orientation: 'portrait',
         scope: '/',
         start_url: '/',
+        categories: ['productivity', 'education'],
         icons: [
           {
             src: 'logo.png',
@@ -44,6 +46,7 @@ export default defineConfig({
         enabled: true
       }
     })
+
 
 
 
