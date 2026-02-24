@@ -35,7 +35,7 @@ const WeatherDetailView = ({ weather, t }) => {
         : [];
 
     return (
-        <div className="weather-detail-view">
+        <div className="view-container weather-detail-view">
             <WeatherCard data={weather} t={t} />
 
             {/* ── Current Details ──────────────────────── */}
