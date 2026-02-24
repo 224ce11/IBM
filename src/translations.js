@@ -37,6 +37,11 @@ export const translations = {
         precipitation: "Precipitation",
         wind_speed: "Wind Speed",
         pressure: "Pressure",
+        visibility: "Visibility",
+        forecast_3h: "Upcoming Forecast",
+        forecast_chart: "Temperature & Rain Trend",
+        temperature: "Temperature",
+        chance_of_rain: "Chance of Rain",
         soil_note: "Note: Recommendations are based on general soil properties.",
         // Status Labels
         "Dry": "Dry",
@@ -171,7 +176,10 @@ export const translations = {
         wind_speed: "પવનની ગતિ",
         pressure: "દબાણ",
         visibility: "દૃશ્યતા",
-        forecast_3h: "3-કલાકની આગાહી",
+        forecast_3h: "આગામી આગાહી",
+        forecast_chart: "તાપમાન અને વરસાદ વલણ",
+        temperature: "તાપમાન",
+        chance_of_rain: "વરસાદની શક્યતા",
         // Soil Types
         "Clay": "ચીકણી માટી",
         "Sandy": "રેતાળ",
