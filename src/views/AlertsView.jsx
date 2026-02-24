@@ -133,25 +133,48 @@ const AlertsView = ({ weather, soil, t }) => {
         setAlerts(newAlerts);
     }, [weather, soil]);
 
-    const requestNotificationPermission = async () => {
-        if (!('Notification' in window)) { alert("This browser does not support desktop notifications"); return; }
-        const result = await Notification.requestPermission();
-        setPermission(result);
-        if (result === 'granted') {
-            new Notification(t('app_name'), { body: "Notifications enabled! You'll be alerted of severe weather & crop risks.", icon: '/icon.png' });
+    // Works on both desktop (new Notification) and mobile (SW showNotification)
+    const sendNotification = async (title, body, icon = '/logo.png') => {
+        if (Notification.permission !== 'granted') return;
+        try {
+            if ('serviceWorker' in navigator) {
+                const registration = await navigator.serviceWorker.ready;
+                await registration.showNotification(title, {
+                    body,
+                    icon,
+                    badge: '/logo.png',
+                    vibrate: [200, 100, 200],
+                });
+            } else {
+                new Notification(title, { body, icon });
+            }
+        } catch (err) {
+            console.warn('SW notification failed, falling back:', err);
+            new Notification(title, { body, icon });
         }
     };
 
-    const simulateStorm = () => {
-        if (permission === 'granted') {
-            new Notification("⚠️ " + t("storm_alert"), {
-                body: "Cyclone Warning: High winds (80km/h) expected in 1 hour. Seek shelter immediately.",
-                icon: '/vite.svg',
-                vibrate: [200, 100, 200]
-            });
-        } else {
-            alert("Please enable notifications first!");
+    const requestNotificationPermission = async () => {
+        if (!('Notification' in window)) { alert("This browser does not support notifications"); return; }
+        const result = await Notification.requestPermission();
+        setPermission(result);
+        if (result === 'granted') {
+            sendNotification(
+                t('app_name'),
+                "Notifications enabled! You'll be alerted of severe weather & crop risks."
+            );
         }
+    };
+
+    const simulateStorm = async () => {
+        if (permission !== 'granted') {
+            alert("Please enable notifications first!");
+            return;
+        }
+        await sendNotification(
+            "⚠️ " + t("storm_alert"),
+            "Cyclone Warning: High winds (80km/h) expected in 1 hour. Seek shelter immediately."
+        );
     };
 
     // Color map for alert types

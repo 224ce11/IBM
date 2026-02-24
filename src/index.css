@@ -37,6 +37,11 @@
   --demo-banner-color: #856404;
   --demo-banner-border: #ffeeba;
   --spinner-track: #f3f3f3;
+
+  --breakdown-warn-bg: #FFF3E0;
+  --breakdown-warn-color: #7B3F00;
+  --breakdown-ok-bg: #F1F8E9;
+  --breakdown-ok-color: #2E7D32;
 }
 
 /* ── Dark Theme ────────────────────────────────────────────── */
@@ -70,6 +75,11 @@
   --demo-banner-color: #F59E0B;
   --demo-banner-border: #4A3A00;
   --spinner-track: #2D3143;
+
+  --breakdown-warn-bg: #2A1A00;
+  --breakdown-warn-color: #FFBA77;
+  --breakdown-ok-bg: #0D2110;
+  --breakdown-ok-color: #81C784;
 }
 
 /* ── Base ─────────────────────────────────────────────────── */

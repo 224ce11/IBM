@@ -175,7 +175,7 @@ function App() {
         {activeTab === 'Weather' ? (
           <WeatherDetailView weather={weather} t={t} />
         ) : activeTab === 'Soil' ? (
-          <SoilDetailView soilData={soil} t={t} />
+          <SoilDetailView soilData={soil} weather={weather} t={t} />
         ) : activeTab === 'Alerts' ? (
           <AlertsView weather={weather} soil={soil} t={t} />
         ) : (

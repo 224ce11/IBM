@@ -211,7 +211,7 @@ const CropHealth = ({ t, weather, soil }) => {
                                     <option key={crop} value={crop}>{t(crop)}</option>
                                 ))}
                             </select>
-                            <ChevronDown size={14} color="#666" style={{ position: 'absolute', right: 4, pointerEvents: 'none', zIndex: 0 }} />
+                            <ChevronDown size={14} style={{ position: 'absolute', right: 4, pointerEvents: 'none', zIndex: 0, color: 'var(--text-muted)' }} />
                         </div>
                     </div>
 
@@ -237,7 +237,7 @@ const CropHealth = ({ t, weather, soil }) => {
             <div className="metric-row health-bar-container">
                 <div className="metric-header">
                     <span className="label-sm">{t('overall_health')}</span>
-                    <span className="health-percent" style={{ color: score < 50 ? '#D32F2F' : '#333' }}>{score}%</span>
+                    <span className="health-percent" style={{ color: score < 50 ? 'var(--danger)' : 'var(--text-primary)' }}>{score}%</span>
                 </div>
                 <div className="progress-bg">
                     <div className="progress-fill" style={{ width: `${score}%`, background: barColor }}></div>
@@ -246,35 +246,29 @@ const CropHealth = ({ t, weather, soil }) => {
 
             {/* Risk Breakdown Toggle */}
             <button
+                className="score-breakdown-btn"
                 onClick={() => setShowBreakdown(!showBreakdown)}
-                style={{
-                    marginTop: '10px', width: '100%', padding: '8px 12px',
-                    borderRadius: '8px', border: '1px solid #e0e0e0',
-                    background: '#f9f9f9', cursor: 'pointer', fontSize: '13px',
-                    color: '#555', display: 'flex', alignItems: 'center',
-                    justifyContent: 'space-between', fontWeight: 500
-                }}
             >
                 <span>📊 {t('why_score')}</span>
                 <ChevronDown size={14} style={{ transform: showBreakdown ? 'rotate(180deg)' : 'rotate(0deg)', transition: '0.2s' }} />
             </button>
 
             {showBreakdown && (
-                <div style={{ marginTop: '8px', fontSize: '12.5px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <div className="breakdown-list">
                     {reasons.map((r, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', padding: '6px 10px', background: '#FFF3E0', borderRadius: '6px', color: '#7B3F00' }}>
+                        <div key={i} className="breakdown-warning">
                             <AlertCircle size={13} style={{ marginTop: '1px', flexShrink: 0 }} />
                             <span>{r}</span>
                         </div>
                     ))}
                     {positives.map((p, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', padding: '6px 10px', background: '#F1F8E9', borderRadius: '6px', color: '#2E7D32' }}>
+                        <div key={i} className="breakdown-positive">
                             <CheckCircle size={13} style={{ marginTop: '1px', flexShrink: 0 }} />
                             <span>{p}</span>
                         </div>
                     ))}
                     {reasons.length === 0 && positives.length === 0 && (
-                        <div style={{ padding: '6px 10px', color: '#888', fontSize: '12px' }}>{t('loading_analysis')}</div>
+                        <div className="breakdown-empty">{t('loading_analysis')}</div>
                     )}
                 </div>
             )}
