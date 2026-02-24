@@ -8,6 +8,7 @@ import StatusRow from './components/StatusRow';
 import SoilHealth from './components/SoilHealth';
 import CropHealth from './components/CropHealth';
 import ActionList from './components/ActionList';
+import CropCalendar from './components/CropCalendar';
 import BottomNav from './components/BottomNav';
 import { fetchWeatherData, fetchCoordinates } from './services/weatherService';
 import { translations } from './translations';
@@ -28,6 +29,7 @@ function App() {
     return saved ? JSON.parse(saved) : null;
   });
   const [lang, setLang] = useState(() => localStorage.getItem('appLang') || 'en');
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
   const [activeTab, setActiveTab] = useState('Home');
   const [isLoading, setIsLoading] = useState(false);
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -39,6 +41,24 @@ function App() {
     setLang(newLang);
     localStorage.setItem('appLang', newLang);
   };
+
+  const toggleDark = () => {
+    setDarkMode(prev => {
+      const next = !prev;
+      localStorage.setItem('darkMode', String(next));
+      return next;
+    });
+  };
+
+  // Apply data-theme to <html> so CSS variables cascade everywhere
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
+
+  // Set initial theme immediately on mount
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  }, []);
 
   const handleSearch = async (city) => {
     try {
@@ -123,7 +143,7 @@ function App() {
         // Minimum loading time for animation to feel good
         setTimeout(() => {
           setIsAppLoading(false);
-        }, 2000);
+        }, 800);
       }
     };
 
@@ -141,6 +161,8 @@ function App() {
         t={t}
         toggleLang={toggleLang}
         onSearch={handleSearch}
+        darkMode={darkMode}
+        toggleDark={toggleDark}
       />
       <div className="content">
         {weather?.source === 'Mock Data' && (
@@ -155,13 +177,14 @@ function App() {
         ) : activeTab === 'Soil' ? (
           <SoilDetailView soilData={soil} t={t} />
         ) : activeTab === 'Alerts' ? (
-          <AlertsView weather={weather} t={t} />
+          <AlertsView weather={weather} soil={soil} t={t} />
         ) : (
           <>
             <WeatherCard data={weather} t={t} />
             <StatusRow t={t} />
             <SoilHealth t={t} soilData={soil} />
-            <CropHealth t={t} />
+            <CropHealth t={t} weather={weather} soil={soil} />
+            <CropCalendar t={t} />
             <ActionList t={t} />
           </>
         )}

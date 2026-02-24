@@ -62,6 +62,10 @@ export const translations = {
         "tip_storm": "Dig drainage trenches to prevent waterlogging.",
         "tip_wind": "Stake tall crops (Banana/Sugarcane) to prevent lodging.",
         "tip_general": "Ensure crop insurance is active.",
+        "tip_pest": "Inspect crops early morning for pest activity and use targeted sprays.",
+        "tip_fungal": "Improve air circulation between rows and apply copper-based fungicide.",
+        "tip_frost": "Cover plants with cloth or plastic sheeting before nightfall.",
+        "tip_heat": "Water crops in early morning or evening to reduce evaporation.",
         "search_placeholder": "Search city...",
         "demo_mode": "Demo Mode",
         "api_limit_warning": "API limits reached. Using fallback data.",
@@ -70,7 +74,63 @@ export const translations = {
         "install_btn": "Install Now",
         "ios_install_title": "Install on iPhone",
         "ios_install_step1": "1. Tap the Share button in Safari",
-        "ios_install_step2": "2. Select 'Add to Home Screen'"
+        "ios_install_step2": "2. Select 'Add to Home Screen'",
+
+        // CropHealth — Score Breakdown
+        "why_score": "Why this score?",
+        "select_crop": "Select Your Crop",
+        "loading_analysis": "Loading live data for analysis...",
+
+        // CropHealth — Crop Names
+        "Wheat": "Wheat",
+        "Rice (Paddy)": "Rice (Paddy)",
+        "Cotton": "Cotton",
+        "Maize": "Maize",
+        "Sugarcane": "Sugarcane",
+        "Groundnut": "Groundnut",
+
+        // CropHealth — Stages
+        "Sowing": "Sowing",
+        "Vegetative": "Vegetative",
+        "Flowering": "Flowering",
+        "Harvesting": "Harvesting",
+        "Boll Formation": "Boll Formation",
+        "Grand Growth": "Grand Growth",
+        "Pod Formation": "Pod Formation",
+        "Off Season": "Off Season",
+
+        // Alerts — New Types
+        "alert_frost_title": "Frost Warning",
+        "alert_frost_msg": "Temperature is critically low. Cover sensitive crops and protect seedlings overnight.",
+        "alert_heat_title": "Heat Stress Alert",
+        "alert_heat_msg": "Extreme heat detected. Increase irrigation frequency and shade tender crops.",
+        "alert_fungal_title": "Fungal Disease Risk",
+        "alert_fungal_msg": "Very high humidity. Conditions are ideal for blight & mildew. Consider preventive fungicide.",
+        "alert_pest_title": "Pest Outbreak Risk",
+        "alert_pest_msg": "Warm, humid conditions are prime for aphid & whitefly breeding. Monitor crops closely.",
+        "alert_ph_title": "Soil pH Critical",
+        "alert_ph_acidic": "Soil is too acidic. Nutrient absorption is impaired. Apply lime to raise pH.",
+        "alert_ph_alkaline": "Soil is too alkaline. Nutrient absorption is impaired. Apply gypsum or sulfur.",
+        "alert_irrigation_title": "Irrigation Needed",
+        "alert_irrigation_msg": "Soil moisture is critically low with no rain expected. Irrigate soon to prevent wilting.",
+        "alert_spray_title": "Good Time to Spray",
+        "alert_spray_msg": "Low wind, no rain, and manageable humidity. Ideal conditions for pesticide or fertiliser application.",
+        "alert_no_warnings": "No Active Warnings",
+        "alert_no_warnings_msg": "Weather and soil conditions are currently safe. Monitor regularly.",
+        "alert_count_summary": "critical, {w} warnings active",
+
+        // Crop Calendar
+        "crop_calendar": "Crop Calendar",
+        "season_kharif": "Kharif",
+        "season_rabi": "Rabi",
+        "season_annual": "Annual",
+        "badge_sow": "Sow Now",
+        "badge_growing": "Growing",
+        "badge_harvest": "Harvest Soon",
+        "badge_off": "Off Season",
+        "cal_sow_label": "Sow",
+        "cal_grow_label": "Grow",
+        "cal_harvest_label": "Harvest"
     },
     gu: {
         app_name: "સ્માર્ટ કિસાન",
@@ -172,6 +232,10 @@ export const translations = {
         "tip_storm": "પાણી ભરાતું અટકાવવા માટે પાળા બાંધો.",
         "tip_wind": "કેળ/શેરડી જેવા પાકને ટેકો આપો.",
         "tip_general": "પાક વીમો સક્રિય છે કે નહીં તે તપાસો.",
+        "tip_pest": "જંતુઓ માટે વહેલી સવારે પાક તપાસો અને લક્ષ્યયુક્ત જંતુનાશક વાપરો.",
+        "tip_fungal": "હારો વચ્ચે હવા ઉજળી કરો અને કોપર-આધારિત ફૂગનાશક લગાવો.",
+        "tip_frost": "સૂર્યાસ્ત પહેલા છોડ પર કપડું અથવા પ્લાસ્ટિક ઢાંકો.",
+        "tip_heat": "બાષ્પીભવન ઘટાડવા સવારે વહેલા અથવા સાંજે સિંચાઈ કરો.",
         "search_placeholder": "શહેર શોધો...",
         "demo_mode": "ડેમો મોડ",
         "api_limit_warning": "API મર્યાદા પૂરી થઈ ગઈ છે. વૈકલ્પિક માહિતી બતાવી રહ્યા છીએ.",
@@ -180,6 +244,61 @@ export const translations = {
         "install_btn": "હમણાં ઇન્સ્ટોલ કરો",
         "ios_install_title": "iPhone પર ઇન્સ્ટોલ કરો",
         "ios_install_step1": "1. સફારીમાં શેર બટન પર ટેપ કરો",
-        "ios_install_step2": "2. 'હોમ સ્ક્રીન પર ઉમેરો' પસંદ કરો"
+        "ios_install_step2": "2. 'હોમ સ્ક્રીન પર ઉમેરો' પસંદ કરો",
+
+        // CropHealth — Score Breakdown
+        "why_score": "આ સ્કોર કેમ?",
+        "select_crop": "તમારો પાક પસંદ કરો",
+        "loading_analysis": "વિશ્લેષણ માટે ડેટા લોડ થઈ રહ્યો છે...",
+
+        // CropHealth — Crop Names
+        "Wheat": "ઘઉં",
+        "Rice (Paddy)": "ડાંગર (ચોખા)",
+        "Cotton": "કપાસ",
+        "Maize": "મકાઈ",
+        "Sugarcane": "શેરડી",
+        "Groundnut": "મગફળી",
+
+        // CropHealth — Stages
+        "Sowing": "વાવણી",
+        "Vegetative": "વૃદ્ધિ તબક્કો",
+        "Flowering": "ફૂલ આવવા",
+        "Harvesting": "લણણી",
+        "Boll Formation": "જીંડવા બનવા",
+        "Grand Growth": "ઝડપી વૃદ્ધિ",
+        "Pod Formation": "શીંગ બનવા",
+        "Off Season": "બિન-ઋતુ",
+
+        // Alerts — New Types
+        "alert_frost_title": "હિમ ચેતવણી",
+        "alert_frost_msg": "તાપમાન ખૂબ ઓછું છે. સંવેદનશીલ પાક ઢાંકો અને રોપા રાત્રે સુરક્ષિત રાખો.",
+        "alert_heat_title": "ગરમીનો તણાવ ચેતવણી",
+        "alert_heat_msg": "ભારે ગરમી. સિંચાઈ વધારો અને નાજુક પાકને છાંયો આપો.",
+        "alert_fungal_title": "ફૂગ રોગ નો ખતરો",
+        "alert_fungal_msg": "ભેજ ખૂબ વધુ છે. ઝૂળ અને ઘેળ રોગ માટે અનુકૂળ. ફૂગનાશક છાંટવાનું વિચારો.",
+        "alert_pest_title": "જીવાત ફાટી નીકળવાનો ખતરો",
+        "alert_pest_msg": "ગરમ અને ભેજ ભર્યા સ્થિતિ - મોલો-મશી ઉત્પત્તિ માટે અનુકૂળ. પાક ધ્યાનપૂર્વક તપાસો.",
+        "alert_ph_title": "જમીનનું pH ગંભીર",
+        "alert_ph_acidic": "જમીન ખૂબ એસિડિક છે. પોષક તત્વો ઓછા મળે છે. ચૂનો નાખો.",
+        "alert_ph_alkaline": "જમીન ખૂબ ક્ષારીય છે. જીપ્સમ અથવા ગંધક નાખો.",
+        "alert_irrigation_title": "સિંચાઈ જરૂરી",
+        "alert_irrigation_msg": "જમીનનો ભેજ ખૂબ ઓછો છે અને વરસાદ નથી. ઝડપથી સિંચાઈ કરો નહીં તો પાક કરમાઈ જશે.",
+        "alert_spray_title": "છંટકાવ માટે ઉત્તમ સમય",
+        "alert_spray_msg": "ઓછો પવન, વરસાદ નહીં, સ્વીકાર્ય ભેજ — જંતુનાશક અથવા ખાતર છાંટવા માટે અનુકૂળ.",
+        "alert_no_warnings": "કોઈ ચેતવણી નથી",
+        "alert_no_warnings_msg": "હાલ હવામાન અને જમીન સ્થિતિ સુરક્ષિત છે. નિયમિત ધ્યાન રાખો.",
+
+        // Crop Calendar
+        "crop_calendar": "પાક કૅલેન્ડર",
+        "season_kharif": "ખરીફ",
+        "season_rabi": "રવિ",
+        "season_annual": "વાર્ષિક",
+        "badge_sow": "હવે વાવો",
+        "badge_growing": "ઉગી રહ્યો છે",
+        "badge_harvest": "લણણી નજીક",
+        "badge_off": "બિન-ઋતુ",
+        "cal_sow_label": "વાવણી",
+        "cal_grow_label": "ઉગાડ",
+        "cal_harvest_label": "લણણી"
     }
 };

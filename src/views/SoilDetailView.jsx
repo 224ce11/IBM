@@ -52,8 +52,8 @@ const SoilDetailView = ({ soilData, t }) => {
                         <div key={index} className="recommendation-card">
                             <span style={{ fontSize: '24px', marginRight: '16px' }}>{crop.icon}</span>
                             <div>
-                                <h4 style={{ margin: 0, fontSize: '16px', color: '#1b5e20' }}>{t(crop.name) || crop.name}</h4>
-                                <span style={{ fontSize: '12px', color: '#666' }}>{t('why')}: {t(crop.reason) || crop.reason}</span>
+                                <h4 style={{ margin: 0, fontSize: '16px', color: '#2E7D32' }}>{t(crop.name) || crop.name}</h4>
+                                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{t('why')}: {t(crop.reason) || crop.reason}</span>
                             </div>
                         </div>
                     ))}
@@ -64,7 +64,7 @@ const SoilDetailView = ({ soilData, t }) => {
                 <h3 className="card-title">
                     Note
                 </h3>
-                <p style={{ fontSize: '14px', color: '#555', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
                     {t('soil_note')}
                 </p>
             </div>

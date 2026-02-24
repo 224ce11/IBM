@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Leaf, MapPin, Globe, Search, X } from 'lucide-react';
+import { Leaf, MapPin, Globe, Search, X, Moon, Sun } from 'lucide-react';
 import './Header.css';
 
-const Header = ({ location, t, toggleLang, onSearch }) => {
+const Header = ({ location, t, toggleLang, onSearch, darkMode, toggleDark }) => {
     const [isSearching, setIsSearching] = useState(false);
     const [query, setQuery] = useState('');
 
@@ -46,8 +46,16 @@ const Header = ({ location, t, toggleLang, onSearch }) => {
                             </div>
                         </div>
                         <div className="header-actions">
-                            <button className="icon-btn" onClick={() => setIsSearching(true)}>
+                            <button className="icon-btn" onClick={() => setIsSearching(true)} title="Search location">
                                 <Search size={20} />
+                            </button>
+                            {/* Dark Mode Toggle */}
+                            <button
+                                className="dark-btn"
+                                onClick={toggleDark}
+                                title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                            >
+                                {darkMode ? <Sun size={17} color="#F59E0B" /> : <Moon size={17} color="#6B7280" />}
                             </button>
                             <button className="lang-btn" onClick={toggleLang}>
                                 <Globe size={16} />

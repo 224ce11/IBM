@@ -1,91 +1,151 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, AlertTriangle, Wind, CloudLightning, ShieldCheck, MessageSquare } from 'lucide-react';
+import {
+    Bell, AlertTriangle, Wind, CloudLightning, ShieldCheck,
+    MessageSquare, Thermometer, Droplets, Leaf, Sprout, Info
+} from 'lucide-react';
 import '../components/CardStyles.css';
 
-const AlertsView = ({ weather, t }) => {
+const AlertsView = ({ weather, soil, t }) => {
     const [permission, setPermission] = useState(Notification.permission);
     const [phoneNumber, setPhoneNumber] = useState('');
-    // ... existing ...
+    const [alerts, setAlerts] = useState([]);
 
     const sendSMS = () => {
-        if (!phoneNumber) {
-            alert(t('enter_phone'));
-            return;
-        }
-
-        // 1. Simulation Toast
+        if (!phoneNumber) { alert(t('enter_phone')); return; }
         alert(`✅ ${t('sms_sent')} ${phoneNumber}`);
-
-        // 2. Actual SMS Trigger (Opens default SMS app)
-        // In a real app with backend, this would call an API like Twilio
-        const message = "WARNING: Heavy Storm predicted in your area. Please stay safe. - Smart Farmer App";
+        const message = "WARNING: Severe weather/crop risk detected in your area. Please take action. - Smart Farmer App";
         window.open(`sms:${phoneNumber}?body=${encodeURIComponent(message)}`, '_blank');
     };
 
-
-    // Simulated Alerts Data (since live storms are rare for testing)
-    // In production, this would come from weather.alerts array
-    const [alerts, setAlerts] = useState([]);
-
     useEffect(() => {
-        // Detect severe conditions from live weather data
-        if (weather) {
-            const newAlerts = [];
+        if (!weather) return;
+        const newAlerts = [];
 
-            // 1. High Wind Alert
-            if (weather.windSpeed > 20) {
-                newAlerts.push({
-                    type: 'warning',
-                    title: 'High Wind Warning',
-                    message: `Wind speeds detected at ${weather.windSpeed} km/h. Secure loose objects.`,
-                    icon: <Wind size={24} color="#F57C00" />
-                });
-            }
+        const temp = weather.temp ?? 28;
+        const humidity = weather.humidity ?? 60;
+        const windSpeed = weather.windSpeed ?? 0;
+        const rainfall = weather.rainfall ?? 0;
+        const condition = weather.condition?.toLowerCase() ?? '';
+        const ph = parseFloat(soil?.ph) || 6.5;
+        const moisture = parseFloat(soil?.moisture) || 45;
 
-            // 2. Storm/Rain Alert
-            if (weather.condition.toLowerCase().includes('storm') || weather.rainfall > 10) {
-                newAlerts.push({
-                    type: 'danger',
-                    title: 'Storm Alert',
-                    message: `Heavy rain/storm detected (${weather.rainfall}mm). Stay indoors.`,
-                    icon: <CloudLightning size={24} color="#D32F2F" />
-                });
-            }
-
-            // 3. Demo Mock Alert if empty (so user sees something)
-            if (newAlerts.length === 0) {
-                newAlerts.push({
-                    type: 'success',
-                    title: 'No Active Warnings',
-                    message: 'Weather conditions are currently safe.',
-                    icon: <ShieldCheck size={24} color="#388E3C" />
-                });
-            }
-
-            setAlerts(newAlerts);
+        // ── 1. Frost Alert ─────────────────────────────────────────────
+        if (temp < 5) {
+            newAlerts.push({
+                type: 'danger',
+                title: `❄️ ${t('alert_frost_title')}`,
+                message: t('alert_frost_msg'),
+                icon: <Thermometer size={24} color="#1565C0" />
+            });
         }
-    }, [weather]);
+
+        // ── 2. Heat Stress Alert ───────────────────────────────────────
+        if (temp > 40) {
+            newAlerts.push({
+                type: 'danger',
+                title: `🌡 ${t('alert_heat_title')}`,
+                message: t('alert_heat_msg'),
+                icon: <Thermometer size={24} color="#D32F2F" />
+            });
+        }
+
+        // ── 3. High Wind Alert ─────────────────────────────────────────
+        if (windSpeed > 20) {
+            newAlerts.push({
+                type: 'warning',
+                title: `💨 ${t('warning')} — ${t('wind_speed')}`,
+                message: `${t('wind_speed')}: ${windSpeed} km/h. ${t('tip_wind')}`,
+                icon: <Wind size={24} color="#F57C00" />
+            });
+        }
+
+        // ── 4. Storm / Heavy Rain Alert ────────────────────────────────
+        if (condition.includes('storm') || condition.includes('thunder') || rainfall > 10) {
+            newAlerts.push({
+                type: 'danger',
+                title: `⛈ ${t('storm_alert')}`,
+                message: `${t('rainfall')}: ${rainfall}mm. ${t('tip_storm')}`,
+                icon: <CloudLightning size={24} color="#D32F2F" />
+            });
+        }
+
+        // ── 5. High Humidity / Fungal Risk ────────────────────────────
+        if (humidity > 85) {
+            newAlerts.push({
+                type: 'warning',
+                title: `🍄 ${t('alert_fungal_title')}`,
+                message: t('alert_fungal_msg'),
+                icon: <Droplets size={24} color="#7B1FA2" />
+            });
+        }
+
+        // ── 6. Pest Risk Alert ─────────────────────────────────────────
+        if (humidity > 80 && temp >= 25 && temp <= 35) {
+            newAlerts.push({
+                type: 'warning',
+                title: `🐛 ${t('alert_pest_title')}`,
+                message: t('alert_pest_msg'),
+                icon: <Leaf size={24} color="#558B2F" />
+            });
+        }
+
+        // ── 7. Soil pH Critical ────────────────────────────────────────
+        if (soil && (ph < 5.5 || ph > 8.0)) {
+            newAlerts.push({
+                type: 'warning',
+                title: `🧪 ${t('alert_ph_title')} (${ph})`,
+                message: ph < 5.5 ? t('alert_ph_acidic') : t('alert_ph_alkaline'),
+                icon: <Info size={24} color="#F57C00" />
+            });
+        }
+
+        // ── 8. Irrigation Advisory ─────────────────────────────────────
+        if (moisture < 25 && rainfall === 0) {
+            newAlerts.push({
+                type: 'warning',
+                title: `💧 ${t('alert_irrigation_title')}`,
+                message: t('alert_irrigation_msg'),
+                icon: <Droplets size={24} color="#0288D1" />
+            });
+        }
+
+        // ── 9. Spray Advisory (Positive) ──────────────────────────────
+        if (windSpeed < 10 && rainfall === 0 && humidity < 80) {
+            newAlerts.push({
+                type: 'info',
+                title: `✅ ${t('alert_spray_title')}`,
+                message: t('alert_spray_msg'),
+                icon: <Sprout size={24} color="#388E3C" />
+            });
+        }
+
+        // ── Fallback: All Clear ────────────────────────────────────────
+        const nonInfo = newAlerts.filter(a => a.type !== 'info');
+        if (nonInfo.length === 0) {
+            newAlerts.unshift({
+                type: 'success',
+                title: `✅ ${t('alert_no_warnings')}`,
+                message: t('alert_no_warnings_msg'),
+                icon: <ShieldCheck size={24} color="#388E3C" />
+            });
+        }
+
+        setAlerts(newAlerts);
+    }, [weather, soil]);
 
     const requestNotificationPermission = async () => {
-        if (!('Notification' in window)) {
-            alert("This browser does not support desktop notifications");
-            return;
-        }
+        if (!('Notification' in window)) { alert("This browser does not support desktop notifications"); return; }
         const result = await Notification.requestPermission();
         setPermission(result);
-
         if (result === 'granted') {
-            new Notification(t('app_name'), {
-                body: "Notifications enabled! You will be alerted of severe weather.",
-                icon: '/icon.png' // Ensure you have an icon or remove this line
-            });
+            new Notification(t('app_name'), { body: "Notifications enabled! You'll be alerted of severe weather & crop risks.", icon: '/icon.png' });
         }
     };
 
     const simulateStorm = () => {
         if (permission === 'granted') {
             new Notification("⚠️ " + t("storm_alert"), {
-                body: "Cyclone Warning: High winds (80km/h) expected in 1 hour. Seek shelter.",
+                body: "Cyclone Warning: High winds (80km/h) expected in 1 hour. Seek shelter immediately.",
                 icon: '/vite.svg',
                 vibrate: [200, 100, 200]
             });
@@ -94,11 +154,19 @@ const AlertsView = ({ weather, t }) => {
         }
     };
 
+    // Color map for alert types
+    const alertStyle = {
+        danger: { border: '#D32F2F', bg: 'var(--card-bg)' },
+        warning: { border: '#F57C00', bg: 'var(--card-bg)' },
+        info: { border: '#0288D1', bg: 'var(--card-bg)' },
+        success: { border: '#388E3C', bg: 'var(--card-bg)' },
+    };
+
     return (
         <div className="view-container">
             <h2 className="view-title">{t('active_alerts')}</h2>
 
-            {/* Permission Request Card */}
+            {/* Permission Banner */}
             {permission !== 'granted' && (
                 <div className="recommendation-card" style={{ marginBottom: '20px', borderLeftColor: '#2196F3' }}>
                     <Bell size={24} color="#2196F3" style={{ marginRight: '16px' }} />
@@ -106,100 +174,85 @@ const AlertsView = ({ weather, t }) => {
                         <h4 style={{ margin: 0, fontSize: '16px' }}>{t('enable_notifications')}</h4>
                         <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#666' }}>{t('notify_desc')}</p>
                     </div>
-                    <button
-                        onClick={requestNotificationPermission}
-                        style={{ background: '#2196F3', color: 'white', padding: '8px 16px', borderRadius: '8px', fontWeight: 600 }}
-                    >
+                    <button onClick={requestNotificationPermission} style={{ background: '#2196F3', color: 'white', padding: '8px 16px', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
                         {t('enable')}
                     </button>
                 </div>
             )}
 
-            {/* List of Alerts */}
-            <div className="recommendation-list" style={{ display: 'flex', flexDirection: 'column' }}>
+            {/* Alert Count Summary */}
+            {alerts.filter(a => a.type === 'danger' || a.type === 'warning').length > 0 && (
+                <div style={{ marginBottom: '16px', padding: '10px 14px', background: 'rgba(230, 81, 0, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px', border: '1px solid rgba(230, 81, 0, 0.2)' }}>
+                    <AlertTriangle size={18} color="#E65100" />
+                    <span style={{ fontSize: '13px', color: '#E65100', fontWeight: 600 }}>
+                        {alerts.filter(a => a.type === 'danger').length} critical, {alerts.filter(a => a.type === 'warning').length} warnings active
+                    </span>
+                </div>
+            )}
+
+            {/* Alert List */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {alerts.map((alert, index) => (
                     <div key={index} className="recommendation-card" style={{
-                        borderLeftColor: alert.type === 'danger' ? '#D32F2F' : alert.type === 'warning' ? '#F57C00' : '#388E3C',
-                        background: alert.type === 'success' ? '#F1F8E9' : '#fff'
+                        borderLeftColor: alertStyle[alert.type]?.border ?? '#888',
+                        background: alertStyle[alert.type]?.bg ?? '#fff',
+                        alignItems: 'flex-start'
                     }}>
-                        <div style={{ marginRight: '16px' }}>{alert.icon}</div>
+                        <div style={{ marginRight: '14px', marginTop: '2px' }}>{alert.icon}</div>
                         <div>
-                            <h4 style={{ margin: 0, fontSize: '16px', color: '#333' }}>{alert.title}</h4>
-                            <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#555' }}>{alert.message}</p>
+                            <h4 style={{ margin: 0, fontSize: '15px', color: 'var(--text-primary)' }}>{alert.title}</h4>
+                            <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{alert.message}</p>
                         </div>
                     </div>
                 ))}
             </div>
 
-            {/* Safety Action Plan - Recommendation System */}
-            {alerts.length > 0 && (
-                <div style={{ marginTop: '20px', padding: '20px', background: '#FFF3E0', borderRadius: '12px', borderLeft: '4px solid #F57C00' }}>
-                    <h4 style={{ margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Safety Tips */}
+            {alerts.some(a => a.type === 'warning' || a.type === 'danger') && (
+                <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(245, 124, 0, 0.08)', borderRadius: '12px', borderLeft: '4px solid #F57C00', border: '1px solid rgba(245, 124, 0, 0.2)', borderLeft: '4px solid #F57C00' }}>
+                    <h4 style={{ margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                         <ShieldCheck size={18} color="#F57C00" />
                         {t('safety_tips')}
                     </h4>
-                    <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: '#555' }}>
-                        {alerts.some(a => a.type === 'warning') && <li>{t('tip_wind')}</li>}
-                        {alerts.some(a => a.type === 'danger') && <li>{t('tip_storm')}</li>}
+                    <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
+                        {alerts.some(a => a.type === 'warning' && a.title.includes('Wind')) && <li>{t('tip_wind')}</li>}
+                        {alerts.some(a => a.type === 'danger' && a.title.includes('Storm')) && <li>{t('tip_storm')}</li>}
+                        {alerts.some(a => a.title.includes(t('alert_pest_title').slice(0, 5)) || a.title.includes('Pest') || a.title.includes('જીવાત')) && <li>{t('tip_pest')}</li>}
+                        {alerts.some(a => a.title.includes(t('alert_fungal_title').slice(0, 3)) || a.title.includes('Fungal') || a.title.includes('ફૂગ')) && <li>{t('tip_fungal')}</li>}
+                        {alerts.some(a => a.title.includes(t('alert_frost_title').slice(0, 3)) || a.title.includes('Frost') || a.title.includes('હિમ')) && <li>{t('tip_frost')}</li>}
+                        {alerts.some(a => a.title.includes(t('alert_heat_title').slice(0, 3)) || a.title.includes('Heat') || a.title.includes('ગરમ')) && <li>{t('tip_heat')}</li>}
                         <li>{t('tip_general')}</li>
                     </ul>
                 </div>
             )}
 
-            {/* Simulated Demo Control */}
-            <div style={{ marginTop: '20px', padding: '20px', background: '#FFF3E0', borderRadius: '12px' }}>
-                {/* ... rest of existing code ... */}
-                <h4 style={{ margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Test Simulation */}
+            <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(245, 124, 0, 0.08)', borderRadius: '12px', border: '1px solid rgba(245, 124, 0, 0.15)' }}>
+                <h4 style={{ margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                     <AlertTriangle size={18} color="#F57C00" />
                     Test Simulation
                 </h4>
-                <p style={{ fontSize: '12px', marginBottom: '12px' }}>Test how an alert will look on the user's phone:</p>
-                <button
-                    onClick={simulateStorm}
-                    style={{
-                        background: '#D32F2F',
-                        color: 'white',
-                        padding: '10px 20px',
-                        borderRadius: '8px',
-                        width: '100%',
-                        fontWeight: 'bold'
-                    }}
-                >
-                    🚨 Simulate Hurricane Alert
+                <p style={{ fontSize: '12px', marginBottom: '12px', color: 'var(--text-secondary)' }}>Test how a push notification looks on your device:</p>
+                <button onClick={simulateStorm} style={{ background: '#D32F2F', color: 'white', padding: '10px 20px', borderRadius: '8px', width: '100%', fontWeight: 'bold', cursor: 'pointer' }}>
+                    🚨 Simulate Cyclone Alert
                 </button>
             </div>
 
             {/* SMS Section */}
-            <div style={{ marginTop: '20px', padding: '20px', background: '#E3F2FD', borderRadius: '12px' }}>
-                <h4 style={{ margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(2, 136, 209, 0.08)', borderRadius: '12px', border: '1px solid rgba(2, 136, 209, 0.15)' }}>
+                <h4 style={{ margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                     <MessageSquare size={18} color="#1565C0" />
                     {t('sms_alerts')}
                 </h4>
-
                 <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
                     <input
                         type="tel"
                         placeholder="+91 98765 43210"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
-                        style={{
-                            padding: '10px',
-                            borderRadius: '8px',
-                            border: '1px solid #ccc',
-                            width: '100%'
-                        }}
+                        style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', width: '100%', boxSizing: 'border-box', background: 'var(--input-bg)', color: 'var(--input-text)' }}
                     />
-                    <button
-                        onClick={sendSMS}
-                        style={{
-                            background: '#1565C0',
-                            color: 'white',
-                            padding: '10px 20px',
-                            borderRadius: '8px',
-                            fontWeight: 'bold',
-                            cursor: 'pointer'
-                        }}
-                    >
+                    <button onClick={sendSMS} style={{ background: '#1565C0', color: 'white', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>
                         {t('send_sms')}
                     </button>
                 </div>

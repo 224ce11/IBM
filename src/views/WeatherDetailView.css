@@ -2,7 +2,6 @@
     padding-bottom: 20px;
     width: 100%;
     grid-column: 1 / -1;
-    /* Spans all columns of the parent .content grid */
 }
 
 @media (min-width: 1024px) {
@@ -13,31 +12,19 @@
         align-items: start;
     }
 
-    /* Make the WeatherCard span the full width if you want, OR sit on the left */
-    /* Let's Try: Weather Card Left (Top), Details Right (Top), Forecast Full Width (Bottom) works? */
-    /* Or: Weather Card (Left), Details & Forecast (Right stack) */
-
-    /* Approach: Top Row: WeatherCard + CurrentDetails. Bottom Row: Forecast */
-
     .weather-detail-view> :nth-child(1) {
-        /* WeatherCard */
         grid-column: 1 / 2;
         margin: 0 !important;
-        /* Reset margin from component styles */
     }
 
     .weather-detail-view> :nth-child(2) {
-        /* Current Details Container */
         grid-column: 2 / 3;
         margin: 0 !important;
         height: 100%;
-        /* Match height */
     }
 
     .weather-detail-view> :nth-child(3) {
-        /* Forecast Container */
         grid-column: 1 / -1;
-        /* Full width bottom */
         margin: 0 !important;
     }
 }
@@ -52,21 +39,21 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f8f9fa;
+    background: var(--bg-secondary);
     padding: 12px;
     border-radius: 12px;
 }
 
 .detail-label {
     font-size: 12px;
-    color: #666;
+    color: var(--text-secondary);
     display: block;
 }
 
 .detail-value {
     font-size: 16px;
     font-weight: 700;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .forecast-list {
@@ -80,19 +67,28 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px;
-    background: #f8f9fa;
+    background: var(--bg-secondary);
     border-radius: 12px;
 }
 
 .f-time {
     font-size: 14px;
     font-weight: 600;
+    color: var(--text-primary);
 }
 
 .f-icon {
     font-size: 14px;
-    color: #555;
+    color: var(--text-secondary);
     text-transform: capitalize;
+}
+
+.f-rain {
+    font-size: 12px;
+    color: #2196F3;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 @media (min-width: 1024px) {
@@ -113,14 +109,6 @@
     .f-rain {
         justify-content: center;
     }
-}
-
-.f-rain {
-    font-size: 12px;
-    color: #2196F3;
-    display: flex;
-    align-items: center;
-    gap: 4px;
 }
 
 @media (min-width: 600px) {
