@@ -232,7 +232,7 @@ const AlertsView = ({ weather, soil, t }) => {
 
             {/* Safety Tips */}
             {alerts.some(a => a.type === 'warning' || a.type === 'danger') && (
-                <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(245, 124, 0, 0.08)', borderRadius: '12px', borderLeft: '4px solid #F57C00', border: '1px solid rgba(245, 124, 0, 0.2)', borderLeft: '4px solid #F57C00' }}>
+                <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(245, 124, 0, 0.08)', borderRadius: '12px', borderLeft: '4px solid #F57C00', border: '1px solid rgba(245, 124, 0, 0.2)' }}>
                     <h4 style={{ margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
                         <ShieldCheck size={18} color="#F57C00" />
                         {t('safety_tips')}
