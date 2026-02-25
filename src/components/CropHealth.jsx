@@ -154,7 +154,6 @@ const CROP_CONFIG = {
     }
 };
 
-
 // Dynamic scoring function
 const computeScore = (crop, weather, soil, t) => {
     const config = CROP_CONFIG[crop];
@@ -165,7 +164,6 @@ const computeScore = (crop, weather, soil, t) => {
     const positives = [];
     const currentMonth = new Date().getMonth() + 1;
     const cropName = t(crop);
-    const n = t.n;
 
     // 1. Season / Growth Stage Check — biggest differentiator
     const stage = config.stage(currentMonth);
@@ -187,13 +185,13 @@ const computeScore = (crop, weather, soil, t) => {
     if (ph < phMin) {
         const penalty = Math.min(30, Math.round((phMin - ph) * 15));
         score -= penalty;
-        reasons.push(`🧪 ${t('reason_ph_acidic')} (${n(ph)}) — ${t('reason_ideal')} ${n(phMin)}–${n(phMax)}`);
+        reasons.push(`🧪 ${t('reason_ph_acidic')} (${ph}) — ${t('reason_ideal')} ${phMin}–${phMax}`);
     } else if (ph > phMax) {
         const penalty = Math.min(25, Math.round((ph - phMax) * 12));
         score -= penalty;
-        reasons.push(`🧪 ${t('reason_ph_alkaline')} (${n(ph)}) — ${t('reason_ideal')} ${n(phMin)}–${n(phMax)}`);
+        reasons.push(`🧪 ${t('reason_ph_alkaline')} (${ph}) — ${t('reason_ideal')} ${phMin}–${phMax}`);
     } else {
-        positives.push(`🧪 ${t('reason_ph_ok')} (${n(ph)})`);
+        positives.push(`🧪 ${t('reason_ph_ok')} (${ph})`);
     }
 
     // 3. Temperature Check
@@ -202,13 +200,13 @@ const computeScore = (crop, weather, soil, t) => {
     if (temp < tMin) {
         const penalty = Math.min(25, Math.round((tMin - temp) * 3));
         score -= penalty;
-        reasons.push(`🌡 ${t('reason_too_cold')} (${n(temp)}°C) — ${cropName} ${t('reason_needs')} ${n(tMin)}–${n(tMax)}°C`);
+        reasons.push(`🌡 ${t('reason_too_cold')} (${temp}°C) — ${cropName} ${t('reason_needs')} ${tMin}–${tMax}°C`);
     } else if (temp > tMax) {
         const penalty = Math.min(25, Math.round((temp - tMax) * 3));
         score -= penalty;
-        reasons.push(`🌡 ${t('reason_heat_stress')} (${n(temp)}°C) — ${cropName} ${t('reason_needs')} ${n(tMin)}–${n(tMax)}°C`);
+        reasons.push(`🌡 ${t('reason_heat_stress')} (${temp}°C) — ${cropName} ${t('reason_needs')} ${tMin}–${tMax}°C`);
     } else {
-        positives.push(`🌡 ${t('reason_temp_ok')} (${n(temp)}°C)`);
+        positives.push(`🌡 ${t('reason_temp_ok')} (${temp}°C)`);
     }
 
     // 4. Moisture Check
@@ -217,13 +215,13 @@ const computeScore = (crop, weather, soil, t) => {
     if (moisture < mMin) {
         const penalty = Math.min(25, Math.round((mMin - moisture) * 0.8));
         score -= penalty;
-        reasons.push(`💧 ${t('reason_low_moisture')} (${n(moisture)}%) — ${t('reason_needs')} ${n(mMin)}–${n(mMax)}%`);
+        reasons.push(`💧 ${t('reason_low_moisture')} (${moisture}%) — ${t('reason_needs')} ${mMin}–${mMax}%`);
     } else if (moisture > mMax) {
         const penalty = Math.min(15, Math.round((moisture - mMax) * 0.4));
         score -= penalty;
-        reasons.push(`💧 ${t('reason_waterlogged')} (${n(moisture)}%) — ${t('reason_ideal')} ≤${n(mMax)}%`);
+        reasons.push(`💧 ${t('reason_waterlogged')} (${moisture}%) — ${t('reason_ideal')} ≤${mMax}%`);
     } else {
-        positives.push(`💧 ${t('reason_moisture_ok')} (${n(moisture)}%)`);
+        positives.push(`💧 ${t('reason_moisture_ok')} (${moisture}%)`);
     }
 
     // 5. Rainfall Check
@@ -231,7 +229,7 @@ const computeScore = (crop, weather, soil, t) => {
     if (rainfall > config.maxRainfall) {
         const penalty = Math.min(20, Math.round((rainfall - config.maxRainfall) * 0.5));
         score -= penalty;
-        reasons.push(`🌧 ${t('reason_heavy_rain')} (${n(rainfall)}mm)`);
+        reasons.push(`🌧 ${t('reason_heavy_rain')} (${rainfall}mm)`);
     } else if (rainfall === 0 && moisture < 30) {
         score -= 10;
         reasons.push(`☀️ ${t('reason_no_rain_dry')}`);
@@ -241,20 +239,20 @@ const computeScore = (crop, weather, soil, t) => {
     const humidity = weather?.humidity ?? 60;
     if (humidity > 85) {
         score -= 10;
-        reasons.push(`🍄 ${t('reason_high_humidity')} (${n(humidity)}%)`);
+        reasons.push(`🍄 ${t('reason_high_humidity')} (${humidity}%)`);
     } else if (humidity > 70) {
         score -= 5;
-        reasons.push(`🍄 ${t('reason_elevated_humidity')} (${n(humidity)}%)`);
+        reasons.push(`🍄 ${t('reason_elevated_humidity')} (${humidity}%)`);
     }
 
     // 7. Wind stress check
     const wind = weather?.windSpeed ?? 10;
     if (wind > 40) {
         score -= 15;
-        reasons.push(`💨 ${t('reason_strong_wind')} (${n(wind)} km/h)`);
+        reasons.push(`💨 ${t('reason_strong_wind')} (${wind} km/h)`);
     } else if (wind > 25) {
         score -= 5;
-        reasons.push(`💨 ${t('reason_moderate_wind')} (${n(wind)} km/h)`);
+        reasons.push(`💨 ${t('reason_moderate_wind')} (${wind} km/h)`);
     }
 
     score = Math.max(5, Math.min(100, Math.round(score)));
@@ -334,7 +332,7 @@ const CropHealth = ({ t, weather, soil }) => {
             <div className="metric-row health-bar-container">
                 <div className="metric-header">
                     <span className="label-sm">{t('overall_health')}</span>
-                    <span className="health-percent" style={{ color: score < 50 ? 'var(--danger)' : 'var(--text-primary)' }}>{t.n(score)}%</span>
+                    <span className="health-percent" style={{ color: score < 50 ? 'var(--danger)' : 'var(--text-primary)' }}>{score}%</span>
                 </div>
                 <div className="progress-bg">
                     <div className="progress-fill" style={{ width: `${score}%`, background: barColor }}></div>

@@ -54,7 +54,7 @@ const SoilHealth = ({ t, soilData }) => {
                     </div>
                     {/* Fake moisture logic: if data is loading, show text, else show number */}
                     <span className="metric-value">
-                        {t.n(data.moisture)}
+                        {data.moisture}
                         {moistureStatus.label && <span className={`tag ${moistureStatus.color}`} style={{ marginLeft: '6px' }}>{t(moistureStatus.label)}</span>}
                     </span>
                 </div>
@@ -71,7 +71,7 @@ const SoilHealth = ({ t, soilData }) => {
                         <span>{t('ph_level')}</span>
                     </div>
                     <span className="metric-value">
-                        {t.n(data.ph)}
+                        {data.ph}
                         <span className={`tag ${phStatus.color}`}>{t(phStatus.label)}</span>
                     </span>
                 </div>
@@ -81,7 +81,7 @@ const SoilHealth = ({ t, soilData }) => {
                         <span style={{ fontSize: '12px' }}>Nitrogen</span>
                     </div>
                     <span className="metric-value">
-                        {t.n(data.nitrogen)}
+                        {data.nitrogen}
                         {nitrogenStatus.label && <span className={`tag ${nitrogenStatus.color}`} style={{ marginLeft: '6px' }}>{t(nitrogenStatus.label)}</span>}
                     </span>
                 </div>
@@ -95,9 +95,9 @@ const SoilHealth = ({ t, soilData }) => {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#666', marginBottom: '4px' }}>
-                        <div style={{ color: '#d4a373' }}>{t('sand')}: <b>{t.n(data.composition.sand)}%</b></div>
-                        <div style={{ color: '#908677' }}>{t('silt')}: <b>{t.n(data.composition.silt)}%</b></div>
-                        <div style={{ color: '#6d4c41' }}>{t('clay')}: <b>{t.n(data.composition.clay)}%</b></div>
+                        <div style={{ color: '#d4a373' }}>{t('sand')}: <b>{data.composition.sand}%</b></div>
+                        <div style={{ color: '#908677' }}>{t('silt')}: <b>{data.composition.silt}%</b></div>
+                        <div style={{ color: '#6d4c41' }}>{t('clay')}: <b>{data.composition.clay}%</b></div>
                     </div>
 
                     <div style={{ display: 'flex', height: '8px', borderRadius: '4px', overflow: 'hidden', width: '100%' }}>

@@ -1,66 +1,55 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { CalendarDays, ChevronDown } from 'lucide-react';
 import './CardStyles.css';
 import './CropCalendar.css';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-// idealPh & idealTemp used to filter crops by local soil/weather
+// Sow: months of sowing (1-indexed), Grow: growing months, Harvest: harvest months
 const CROPS = [
     {
         name: 'Wheat', icon: '🍞', season: 'Rabi',
-        sow: [11, 12], grow: [1, 2, 3], harvest: [4, 5],
-        idealPh: [6.0, 7.5], idealTemp: [15, 25]
+        sow: [11, 12], grow: [1, 2, 3], harvest: [4, 5]
     },
     {
         name: 'Rice (Paddy)', icon: '🌾', season: 'Kharif',
-        sow: [6, 7], grow: [8, 9], harvest: [10, 11],
-        idealPh: [5.5, 7.0], idealTemp: [22, 32]
+        sow: [6, 7], grow: [8, 9], harvest: [10, 11]
     },
     {
         name: 'Cotton', icon: '🌿', season: 'Kharif',
-        sow: [4, 5, 6], grow: [7, 8, 9], harvest: [10, 11, 12],
-        idealPh: [5.8, 8.0], idealTemp: [25, 35]
+        sow: [4, 5, 6], grow: [7, 8, 9], harvest: [10, 11, 12]
     },
     {
         name: 'Maize', icon: '🌽', season: 'Kharif',
-        sow: [6, 7], grow: [8, 9], harvest: [10, 11],
-        idealPh: [5.5, 7.5], idealTemp: [18, 32]
+        sow: [6, 7], grow: [8, 9], harvest: [10, 11]
     },
     {
         name: 'Sugarcane', icon: '🍬', season: 'Annual',
-        sow: [2, 3, 4], grow: [5, 6, 7, 8, 9, 10, 11], harvest: [12, 1],
-        idealPh: [6.0, 7.5], idealTemp: [20, 35]
+        sow: [2, 3, 4], grow: [5, 6, 7, 8, 9, 10, 11], harvest: [12, 1]
     },
     {
         name: 'Groundnut', icon: '🥜', season: 'Kharif',
-        sow: [6, 7], grow: [8, 9, 10], harvest: [11, 12],
-        idealPh: [5.5, 7.0], idealTemp: [22, 32]
+        sow: [6, 7], grow: [8, 9, 10], harvest: [11, 12]
     },
     {
         name: 'Tobacco', icon: '🍂', season: 'Rabi',
-        sow: [10, 11], grow: [12, 1, 2, 3], harvest: [4, 5],
-        idealPh: [5.5, 6.5], idealTemp: [20, 30]
+        sow: [10, 11], grow: [12, 1, 2, 3], harvest: [4, 5]
     },
     {
         name: 'Bajra (Pearl Millet)', icon: '🌾', season: 'Kharif',
-        sow: [6, 7], grow: [8, 9], harvest: [10, 11],
-        idealPh: [6.0, 7.5], idealTemp: [25, 35]
+        sow: [6, 7], grow: [8, 9], harvest: [10, 11]
     },
     {
         name: 'Castor', icon: '🌱', season: 'Kharif',
-        sow: [7, 8], grow: [9, 10, 11], harvest: [12, 1, 2],
-        idealPh: [5.0, 6.5], idealTemp: [20, 35]
+        sow: [7, 8], grow: [9, 10, 11], harvest: [12, 1, 2]
     },
     {
         name: 'Cumin', icon: '🌿', season: 'Rabi',
-        sow: [11, 12], grow: [1, 2], harvest: [3, 4],
-        idealPh: [7.0, 8.0], idealTemp: [15, 25]
+        sow: [11, 12], grow: [1, 2], harvest: [3, 4]
     },
     {
         name: 'Banana', icon: '🍌', season: 'Annual',
-        sow: [6, 7, 8], grow: [9, 10, 11, 12, 1, 2], harvest: [3, 4, 5],
-        idealPh: [6.0, 7.5], idealTemp: [22, 32]
+        sow: [6, 7, 8], grow: [9, 10, 11, 12, 1, 2], harvest: [3, 4, 5]
     },
 ];
 
@@ -84,30 +73,9 @@ const getActionBadge = (crop, month, t) => {
 
 const phaseColor = { sow: '#42A5F5', grow: '#66BB6A', harvest: '#FFA726', off: '#E0E0E0' };
 
-// Check if a crop is compatible with current soil pH and weather temp
-const isCropCompatible = (crop, soil, weather) => {
-    if (!soil && !weather) return true;
-
-    const ph = parseFloat(soil?.ph) || 7;
-    const temp = weather?.temp ?? 28;
-
-    // pH compatibility: soil pH falls within crop's ideal range ±1.5
-    const phOk = !soil || (ph >= crop.idealPh[0] - 1.5 && ph <= crop.idealPh[1] + 1.5);
-
-    // Temp compatibility: current temp within crop's range ±8°C (seasonal variation)
-    const tempOk = !weather || (temp >= crop.idealTemp[0] - 8 && temp <= crop.idealTemp[1] + 8);
-
-    return phOk && tempOk;
-};
-
-const CropCalendar = ({ t, soil, weather }) => {
-    const currentMonth = new Date().getMonth() + 1;
+const CropCalendar = ({ t }) => {
+    const currentMonth = new Date().getMonth() + 1; // 1–12
     const [expanded, setExpanded] = useState(null);
-
-    const filteredCrops = useMemo(
-        () => CROPS.filter(crop => isCropCompatible(crop, soil, weather)),
-        [soil, weather]
-    );
 
     return (
         <div className="card-container">
@@ -115,9 +83,6 @@ const CropCalendar = ({ t, soil, weather }) => {
                 <CalendarDays size={18} color="#4CAF50" />
                 {t('crop_calendar')}
             </h3>
-            <div className="cal-subtitle">
-                {t('cal_showing')} {filteredCrops.length} / {CROPS.length} {t('cal_crops_for_area')}
-            </div>
 
             {/* Month header strip */}
             <div className="cal-month-strip">
@@ -129,12 +94,13 @@ const CropCalendar = ({ t, soil, weather }) => {
             </div>
 
             {/* Crop rows */}
-            {filteredCrops.map((crop) => {
+            {CROPS.map((crop) => {
                 const badge = getActionBadge(crop, currentMonth, t);
                 const isExpanded = expanded === crop.name;
 
                 return (
                     <div key={crop.name} className="cal-crop-row">
+                        {/* Crop label + badge */}
                         <button
                             className="cal-crop-header"
                             onClick={() => setExpanded(isExpanded ? null : crop.name)}
@@ -156,6 +122,7 @@ const CropCalendar = ({ t, soil, weather }) => {
                             </div>
                         </button>
 
+                        {/* Month color bar */}
                         <div className="cal-bar-strip">
                             {MONTHS.map((_, i) => {
                                 const m = i + 1;
@@ -172,6 +139,7 @@ const CropCalendar = ({ t, soil, weather }) => {
                             })}
                         </div>
 
+                        {/* Expanded detail */}
                         {isExpanded && (
                             <div className="cal-detail">
                                 <div className="cal-detail-item" style={{ color: '#1565C0' }}>

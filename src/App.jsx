@@ -35,6 +35,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isAppLoading, setIsAppLoading] = useState(true);
 
+<<<<<<< HEAD
   // Gujarati & Hindi digit mappings
   const GU_DIGITS = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
   const HI_DIGITS = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
@@ -46,6 +47,9 @@ function App() {
     if (lang === 'hi') return String(val).replace(/[0-9]/g, d => HI_DIGITS[d]);
     return String(val);
   };
+=======
+  const t = (key) => translations[lang][key] || key;
+>>>>>>> parent of c4ea7d5 (Weather translation)
 
   const onLangChange = (newLang) => {
     setLang(newLang);
@@ -197,7 +201,7 @@ function App() {
             <StatusRow t={t} weather={weather} soil={soil} />
             <SoilHealth t={t} soilData={soil} />
             <CropHealth t={t} weather={weather} soil={soil} />
-            <CropCalendar t={t} soil={soil} weather={weather} />
+            <CropCalendar t={t} />
             <ActionList t={t} />
           </>
         )}
