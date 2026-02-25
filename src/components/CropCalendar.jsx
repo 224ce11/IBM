@@ -31,6 +31,26 @@ const CROPS = [
         name: 'Groundnut', icon: '🥜', season: 'Kharif',
         sow: [6, 7], grow: [8, 9, 10], harvest: [11, 12]
     },
+    {
+        name: 'Tobacco', icon: '🍂', season: 'Rabi',
+        sow: [10, 11], grow: [12, 1, 2, 3], harvest: [4, 5]
+    },
+    {
+        name: 'Bajra (Pearl Millet)', icon: '🌾', season: 'Kharif',
+        sow: [6, 7], grow: [8, 9], harvest: [10, 11]
+    },
+    {
+        name: 'Castor', icon: '🌱', season: 'Kharif',
+        sow: [7, 8], grow: [9, 10, 11], harvest: [12, 1, 2]
+    },
+    {
+        name: 'Cumin', icon: '🌿', season: 'Rabi',
+        sow: [11, 12], grow: [1, 2], harvest: [3, 4]
+    },
+    {
+        name: 'Banana', icon: '🍌', season: 'Annual',
+        sow: [6, 7, 8], grow: [9, 10, 11, 12, 1, 2], harvest: [3, 4, 5]
+    },
 ];
 
 const getPhaseForMonth = (crop, month) => {

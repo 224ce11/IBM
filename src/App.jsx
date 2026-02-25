@@ -181,7 +181,7 @@ function App() {
         ) : (
           <>
             <WeatherCard data={weather} t={t} />
-            <StatusRow t={t} />
+            <StatusRow t={t} weather={weather} soil={soil} />
             <SoilHealth t={t} soilData={soil} />
             <CropHealth t={t} weather={weather} soil={soil} />
             <CropCalendar t={t} />

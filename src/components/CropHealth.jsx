@@ -85,83 +85,178 @@ const CROP_CONFIG = {
             if (month >= 11) return 'Harvesting';
             return 'Off Season';
         }
+    },
+    'Tobacco': {
+        icon: '🍂',
+        idealPh: [5.5, 6.5],
+        idealTemp: [20, 30],
+        idealMoisture: [40, 65],
+        maxRainfall: 15,
+        stage: (month) => {
+            if (month >= 10 && month <= 11) return 'Sowing';
+            if (month >= 12 || month <= 1) return 'Vegetative';
+            if (month >= 2 && month <= 3) return 'Curing';
+            if (month >= 4 && month <= 5) return 'Harvesting';
+            return 'Off Season';
+        }
+    },
+    'Bajra (Pearl Millet)': {
+        icon: '🌾',
+        idealPh: [6.0, 7.5],
+        idealTemp: [25, 35],
+        idealMoisture: [25, 55],
+        maxRainfall: 20,
+        stage: (month) => {
+            if (month >= 6 && month <= 7) return 'Sowing';
+            if (month >= 8 && month <= 9) return 'Grain Filling';
+            if (month >= 10 && month <= 11) return 'Harvesting';
+            return 'Off Season';
+        }
+    },
+    'Castor': {
+        icon: '🌱',
+        idealPh: [5.0, 6.5],
+        idealTemp: [20, 35],
+        idealMoisture: [30, 60],
+        maxRainfall: 20,
+        stage: (month) => {
+            if (month >= 7 && month <= 8) return 'Sowing';
+            if (month >= 9 && month <= 11) return 'Seed Formation';
+            if (month >= 12 || month <= 2) return 'Harvesting';
+            return 'Off Season';
+        }
+    },
+    'Cumin': {
+        icon: '🌿',
+        idealPh: [7.0, 8.0],
+        idealTemp: [15, 25],
+        idealMoisture: [25, 50],
+        maxRainfall: 10,
+        stage: (month) => {
+            if (month >= 11 && month <= 12) return 'Sowing';
+            if (month >= 1 && month <= 2) return 'Flowering';
+            if (month >= 3 && month <= 4) return 'Harvesting';
+            return 'Off Season';
+        }
+    },
+    'Banana': {
+        icon: '🍌',
+        idealPh: [6.0, 7.5],
+        idealTemp: [22, 32],
+        idealMoisture: [60, 85],
+        maxRainfall: 40,
+        stage: (month) => {
+            if (month >= 6 && month <= 8) return 'Sowing';
+            if (month >= 9 && month <= 2) return 'Vegetative';
+            if (month >= 3 && month <= 5) return 'Bunch Formation';
+            return 'Fruiting';
+        }
     }
 };
 
 // Dynamic scoring function
-const computeScore = (crop, weather, soil) => {
+const computeScore = (crop, weather, soil, t) => {
     const config = CROP_CONFIG[crop];
-    if (!config) return { score: 50, risk: 'Medium', reasons: [] };
+    if (!config) return { score: 50, risk: 'Medium', reasons: [], positives: [] };
 
     let score = 100;
     const reasons = [];
     const positives = [];
+    const currentMonth = new Date().getMonth() + 1;
+    const cropName = t(crop);
 
-    // 1. pH Check
+    // 1. Season / Growth Stage Check — biggest differentiator
+    const stage = config.stage(currentMonth);
+    if (stage === 'Off Season') {
+        score -= 25;
+        reasons.push(`📅 ${cropName} ${t('reason_off_season')}`);
+    } else if (stage === 'Sowing') {
+        positives.push(`📅 ${t('reason_good_sowing')} — ${cropName}`);
+    } else if (stage === 'Harvesting') {
+        score += 5;
+        positives.push(`📅 ${cropName} ${t('reason_harvest_ready')}`);
+    } else {
+        positives.push(`📅 ${cropName} — ${t(stage)}`);
+    }
+
+    // 2. pH Check
     const ph = parseFloat(soil?.ph) || 6.5;
     const [phMin, phMax] = config.idealPh;
     if (ph < phMin) {
         const penalty = Math.min(30, Math.round((phMin - ph) * 15));
         score -= penalty;
-        reasons.push(`🧪 Soil pH too acidic (${ph}) — ideal is ${phMin}–${phMax}`);
+        reasons.push(`🧪 ${t('reason_ph_acidic')} (${ph}) — ${t('reason_ideal')} ${phMin}–${phMax}`);
     } else if (ph > phMax) {
         const penalty = Math.min(25, Math.round((ph - phMax) * 12));
         score -= penalty;
-        reasons.push(`🧪 Soil pH too alkaline (${ph}) — ideal is ${phMin}–${phMax}`);
+        reasons.push(`🧪 ${t('reason_ph_alkaline')} (${ph}) — ${t('reason_ideal')} ${phMin}–${phMax}`);
     } else {
-        positives.push(`🧪 pH optimal (${ph})`);
+        positives.push(`🧪 ${t('reason_ph_ok')} (${ph})`);
     }
 
-    // 2. Temperature Check
+    // 3. Temperature Check
     const temp = weather?.temp ?? 28;
     const [tMin, tMax] = config.idealTemp;
     if (temp < tMin) {
         const penalty = Math.min(25, Math.round((tMin - temp) * 3));
         score -= penalty;
-        reasons.push(`🌡 Too cold (${temp}°C) — ${crop} needs ${tMin}–${tMax}°C`);
+        reasons.push(`🌡 ${t('reason_too_cold')} (${temp}°C) — ${cropName} ${t('reason_needs')} ${tMin}–${tMax}°C`);
     } else if (temp > tMax) {
         const penalty = Math.min(25, Math.round((temp - tMax) * 3));
         score -= penalty;
-        reasons.push(`🌡 Heat stress (${temp}°C) — ${crop} needs ${tMin}–${tMax}°C`);
+        reasons.push(`🌡 ${t('reason_heat_stress')} (${temp}°C) — ${cropName} ${t('reason_needs')} ${tMin}–${tMax}°C`);
     } else {
-        positives.push(`🌡 Temperature ideal (${temp}°C)`);
+        positives.push(`🌡 ${t('reason_temp_ok')} (${temp}°C)`);
     }
 
-    // 3. Moisture Check
+    // 4. Moisture Check
     const moisture = parseFloat(soil?.moisture) || 45;
     const [mMin, mMax] = config.idealMoisture;
     if (moisture < mMin) {
         const penalty = Math.min(25, Math.round((mMin - moisture) * 0.8));
         score -= penalty;
-        reasons.push(`💧 Low soil moisture (${moisture}%) — needs ${mMin}–${mMax}%`);
+        reasons.push(`💧 ${t('reason_low_moisture')} (${moisture}%) — ${t('reason_needs')} ${mMin}–${mMax}%`);
     } else if (moisture > mMax) {
         const penalty = Math.min(15, Math.round((moisture - mMax) * 0.4));
         score -= penalty;
-        reasons.push(`💧 Waterlogged soil (${moisture}%) — ideal is ≤${mMax}%`);
+        reasons.push(`💧 ${t('reason_waterlogged')} (${moisture}%) — ${t('reason_ideal')} ≤${mMax}%`);
     } else {
-        positives.push(`💧 Moisture adequate (${moisture}%)`);
+        positives.push(`💧 ${t('reason_moisture_ok')} (${moisture}%)`);
     }
 
-    // 4. Rainfall Check
+    // 5. Rainfall Check
     const rainfall = weather?.rainfall ?? 0;
     if (rainfall > config.maxRainfall) {
         const penalty = Math.min(20, Math.round((rainfall - config.maxRainfall) * 0.5));
         score -= penalty;
-        reasons.push(`🌧 Heavy rainfall (${rainfall}mm) may cause waterlogging`);
+        reasons.push(`🌧 ${t('reason_heavy_rain')} (${rainfall}mm)`);
     } else if (rainfall === 0 && moisture < 30) {
         score -= 10;
-        reasons.push(`☀️ No rain + low moisture — consider irrigating`);
+        reasons.push(`☀️ ${t('reason_no_rain_dry')}`);
     }
 
-    // 5. Humidity check (fungal risk)
+    // 6. Humidity check (fungal risk)
     const humidity = weather?.humidity ?? 60;
     if (humidity > 85) {
         score -= 10;
-        reasons.push(`🍄 High humidity (${humidity}%) — fungal disease risk`);
+        reasons.push(`🍄 ${t('reason_high_humidity')} (${humidity}%)`);
+    } else if (humidity > 70) {
+        score -= 5;
+        reasons.push(`🍄 ${t('reason_elevated_humidity')} (${humidity}%)`);
+    }
+
+    // 7. Wind stress check
+    const wind = weather?.windSpeed ?? 10;
+    if (wind > 40) {
+        score -= 15;
+        reasons.push(`💨 ${t('reason_strong_wind')} (${wind} km/h)`);
+    } else if (wind > 25) {
+        score -= 5;
+        reasons.push(`💨 ${t('reason_moderate_wind')} (${wind} km/h)`);
     }
 
     score = Math.max(5, Math.min(100, Math.round(score)));
-    const risk = score >= 75 ? 'Low' : score >= 50 ? 'Medium' : 'High';
+    const risk = score >= 80 ? 'Low' : score >= 55 ? 'Medium' : 'High';
 
     return { score, risk, reasons, positives };
 };
@@ -174,8 +269,8 @@ const CropHealth = ({ t, weather, soil }) => {
     const stage = CROP_CONFIG[selectedCrop]?.stage(currentMonth) ?? 'Unknown';
 
     const { score, risk, reasons, positives } = useMemo(
-        () => computeScore(selectedCrop, weather, soil),
-        [selectedCrop, weather, soil]
+        () => computeScore(selectedCrop, weather, soil, t),
+        [selectedCrop, weather, soil, t]
     );
 
     const riskColor = risk === 'High' ? '#D32F2F' : risk === 'Medium' ? '#EF6C00' : '#2E7D32';
@@ -227,7 +322,7 @@ const CropHealth = ({ t, weather, soil }) => {
                         </div>
                         <div className="risk-badge" style={{ background: riskBg, color: riskColor }}>
                             <div>{t('risk_level')}</div>
-                            <div className="level">{risk}</div>
+                            <div className="level">{t(risk)}</div>
                         </div>
                     </div>
                 </div>
