@@ -3,6 +3,7 @@ import axios from 'axios';
 // Access keys from .env file (Vite prefix is required)
 const KEYS = {
     OPEN_WEATHER: import.meta.env.VITE_OPENWEATHER_API_KEY,
+    OPEN_WEATHER_2: import.meta.env.VITE_OPENWEATHER_API_KEY_2,  // Backup key
     WEATHER_API: import.meta.env.VITE_WEATHERAPI_KEY,
     STORM_GLASS: import.meta.env.VITE_STORMGLASS_API_KEY
 };
@@ -170,41 +171,45 @@ export const fetchWeatherData = async (lat, lon) => {
     console.log(`Fetching weather for ${lat}, ${lon}...`);
 
     try {
-        // Priority 1: OpenWeatherMap
+        // Priority 1: OpenWeatherMap (primary key)
         return await fetchOpenWeather(lat, lon);
     } catch (err1) {
-        console.warn('OpenWeather failed, trying WeatherAPI...', err1.message);
+        console.warn('OpenWeather (primary) failed, trying backup key...', err1.message);
         try {
-            // Priority 2: WeatherAPI
-            return await fetchWeatherAPI(lat, lon);
+            // Priority 2: OpenWeatherMap (backup key)
+            return await fetchOpenWeather2(lat, lon);
         } catch (err2) {
-            console.warn('WeatherAPI failed, trying StormGlass...', err2.message);
+            console.warn('OpenWeather (backup) failed, trying WeatherAPI...', err2.message);
             try {
-                // Priority 3: StormGlass
-                return await fetchStormGlass(lat, lon);
+                // Priority 3: WeatherAPI
+                return await fetchWeatherAPI(lat, lon);
             } catch (err3) {
-                console.warn('StormGlass failed, trying Open-Meteo...', err3.message);
+                console.warn('WeatherAPI failed, trying StormGlass...', err3.message);
                 try {
-                    // Priority 4: Open-Meteo (Free Fallback)
-                    return await fetchOpenMeteo(lat, lon);
+                    // Priority 4: StormGlass
+                    return await fetchStormGlass(lat, lon);
                 } catch (err4) {
-                    console.error('All APIs failed. Returning mock data.', err4.message);
-
-                    const isQuotaError = [err1, err2, err3].some(e => e?.response?.status === 429 || e?.response?.status === 401);
-
-                    return {
-                        temp: 32,
-                        condition: 'Partly Cloudy',
-                        conditionLocal: 'API Unavailable',
-                        humidity: 65,
-                        rainfall: 2,
-                        windSpeed: 12,
-                        locationName: isQuotaError ? 'Demo Mode (API Limit)' : 'Demo Mode (Network/API Error)',
-                        source: 'Mock Data',
-                        feelsLike: 34,
-                        visibility: 10,
-                        forecast: []
-                    };
+                    console.warn('StormGlass failed, trying Open-Meteo...', err4.message);
+                    try {
+                        // Priority 5: Open-Meteo (always free, no key)
+                        return await fetchOpenMeteo(lat, lon);
+                    } catch (err5) {
+                        console.error('All APIs failed.', err5.message);
+                        const isQuotaError = [err1, err2, err3, err4].some(e => e?.response?.status === 429 || e?.response?.status === 401);
+                        return {
+                            temp: 32,
+                            condition: 'Partly Cloudy',
+                            conditionLocal: 'API Unavailable',
+                            humidity: 65,
+                            rainfall: 2,
+                            windSpeed: 12,
+                            locationName: isQuotaError ? 'Demo Mode (API Limit)' : 'Demo Mode (Network/API Error)',
+                            source: 'Mock Data',
+                            feelsLike: 34,
+                            visibility: 10,
+                            forecast: []
+                        };
+                    }
                 }
             }
         }

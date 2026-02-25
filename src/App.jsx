@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import WeatherDetailView from './views/WeatherDetailView';
 import SoilDetailView from './views/SoilDetailView';
 import AlertsView from './views/AlertsView';
+import MarketplaceView from './views/MarketplaceView';
 import Header from './components/Header';
 import WeatherCard from './components/WeatherCard';
 import StatusRow from './components/StatusRow';
@@ -188,6 +189,8 @@ function App() {
           <SoilDetailView soilData={soil} weather={weather} t={t} />
         ) : activeTab === 'Alerts' ? (
           <AlertsView weather={weather} soil={soil} t={t} />
+        ) : activeTab === 'Market' ? (
+          <MarketplaceView t={t} />
         ) : (
           <>
             <WeatherCard data={weather} t={t} />

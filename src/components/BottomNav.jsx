@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, CloudSun, Sprout, Bell } from 'lucide-react';
+import { Home, CloudSun, Sprout, Bell, ShoppingCart } from 'lucide-react';
 import './BottomNav.css';
 
 const BottomNav = ({ t, activeTab, setActiveTab }) => {
@@ -9,7 +9,8 @@ const BottomNav = ({ t, activeTab, setActiveTab }) => {
         { name: 'Home', label: t('nav_home'), icon: Home },
         { name: 'Weather', label: t('nav_weather'), icon: CloudSun },
         { name: 'Soil', label: t('nav_soil'), icon: Sprout },
-        { name: 'Alerts', label: t('nav_alerts'), icon: Bell }
+        { name: 'Alerts', label: t('nav_alerts'), icon: Bell },
+        { name: 'Market', label: t('nav_market'), icon: ShoppingCart }
     ];
 
     return (
