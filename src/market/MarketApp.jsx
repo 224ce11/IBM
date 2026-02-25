@@ -29,6 +29,10 @@ const MarketApp = ({ t }) => {
     const locationForMarket = rawCoords ? { lat: rawCoords.lat, lng: rawCoords.lon } : null;
 
     useEffect(() => {
+        if (!auth) {
+            setUser(null);
+            return;
+        }
         const unsub = onAuthStateChanged(auth, (u) => setUser(u));
         return unsub;
     }, []);

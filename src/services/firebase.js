@@ -11,8 +11,22 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+let app = null;
+let auth = null;
+let db = null;
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Only initialize Firebase if we have actual config values
+if (firebaseConfig.apiKey && firebaseConfig.projectId) {
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+    } catch (err) {
+        console.warn('Firebase initialization failed:', err.message);
+    }
+} else {
+    console.warn('Firebase env vars not found. Marketplace features will be unavailable.');
+}
+
+export { auth, db };
 export default app;
