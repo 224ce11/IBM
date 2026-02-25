@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
-import { Leaf, MapPin, Globe, Search, X, Moon, Sun } from 'lucide-react';
+import { Leaf, MapPin, Globe, Search, X, Moon, Sun, ChevronDown } from 'lucide-react';
 import './Header.css';
 
+const LANGUAGES = [
+    { code: 'en', label: 'English' },
+    { code: 'hi', label: 'हिन्दी' },
+    { code: 'gu', label: 'ગુજરાતી' },
+];
 
 
-const Header = ({ location, t, lang, toggleLang, onSearch, darkMode, toggleDark }) => {
+
+const Header = ({ location, t, lang, onLangChange, onSearch, darkMode, toggleDark }) => {
     const [isSearching, setIsSearching] = useState(false);
     const [query, setQuery] = useState('');
+    const [langOpen, setLangOpen] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,7 +23,7 @@ const Header = ({ location, t, lang, toggleLang, onSearch, darkMode, toggleDark 
             setQuery('');
         }
     };
-
+    const currentLabel = LANGUAGES.find(l => l.code === lang)?.label || 'English';
 
     return (
         <header className="header">
@@ -60,10 +67,30 @@ const Header = ({ location, t, lang, toggleLang, onSearch, darkMode, toggleDark 
                             >
                                 {darkMode ? <Sun size={17} color="#F59E0B" /> : <Moon size={17} color="#6B7280" />}
                             </button>
-                            <button className="lang-btn" onClick={toggleLang}>
-                                <Globe size={16} />
-                                <span>{t('lang_btn')}</span>
-                            </button>
+                            {/* Language Dropdown */}
+                            <div className="lang-dropdown-wrapper">
+                                <button className="lang-btn" onClick={() => setLangOpen(!langOpen)}>
+                                    <Globe size={16} />
+                                    <span>{currentLabel}</span>
+                                    <ChevronDown size={14} className={`lang-chevron ${langOpen ? 'open' : ''}`} />
+                                </button>
+                                {langOpen && (
+                                    <>
+                                        <div className="lang-dropdown-backdrop" onClick={() => setLangOpen(false)} />
+                                        <div className="lang-dropdown">
+                                            {LANGUAGES.map(l => (
+                                                <button
+                                                    key={l.code}
+                                                    className={`lang-option ${l.code === lang ? 'active' : ''}`}
+                                                    onClick={() => { onLangChange(l.code); setLangOpen(false); }}
+                                                >
+                                                    {l.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </>
                 )}

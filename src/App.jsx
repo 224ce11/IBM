@@ -35,22 +35,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isAppLoading, setIsAppLoading] = useState(true);
 
-  // Gujarati digit mapping
+  // Digit mappings for localization
   const GU_DIGITS = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+  const HI_DIGITS = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
 
   const t = (key) => translations[lang][key] || key;
   t.n = (val) => {
-    if (lang !== 'gu') return String(val);
-    return String(val).replace(/[0-9]/g, d => GU_DIGITS[d]);
+    if (lang === 'gu') return String(val).replace(/[0-9]/g, d => GU_DIGITS[d]);
+    if (lang === 'hi') return String(val).replace(/[0-9]/g, d => HI_DIGITS[d]);
+    return String(val);
   };
 
-  const toggleLang = () => {
-    setLang(prev => {
-      const newLang = prev === 'en' ? 'gu' : 'en';
-      localStorage.setItem('appLang', newLang);
-      return newLang;
-    });
-  };
 
   const onLangChange = (newLang) => {
     setLang(newLang);
@@ -175,7 +170,7 @@ function App() {
         location={isLoading ? "Updating..." : weather?.locationName}
         t={t}
         lang={lang}
-        toggleLang={toggleLang}
+        onLangChange={onLangChange}
         onSearch={handleSearch}
         darkMode={darkMode}
         toggleDark={toggleDark}
