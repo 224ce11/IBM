@@ -48,7 +48,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('feels_like')}</span>
-                            <span className="detail-value">{weather.feelsLike}°C</span>
+                            <span className="detail-value">{t.n(weather.feelsLike)}°C</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -57,7 +57,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('humidity')}</span>
-                            <span className="detail-value">{weather.humidity}%</span>
+                            <span className="detail-value">{t.n(weather.humidity)}%</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -66,7 +66,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('precipitation')}</span>
-                            <span className="detail-value">{weather.rainfall} mm</span>
+                            <span className="detail-value">{t.n(weather.rainfall)} mm</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -75,7 +75,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('wind_speed')}</span>
-                            <span className="detail-value">{weather.windSpeed} km/h</span>
+                            <span className="detail-value">{t.n(weather.windSpeed)} km/h</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -84,7 +84,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('pressure')}</span>
-                            <span className="detail-value">{weather.pressure} hPa</span>
+                            <span className="detail-value">{t.n(weather.pressure)} hPa</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -93,7 +93,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('visibility')}</span>
-                            <span className="detail-value">{weather.visibility} km</span>
+                            <span className="detail-value">{t.n(weather.visibility)} km</span>
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@ const WeatherDetailView = ({ weather, t }) => {
                             <div key={index} className="forecast-card">
                                 <span className="fc-time">{item.time}</span>
                                 <span className="fc-icon">{item.icon}</span>
-                                <span className="fc-temp">{item.temp}°C</span>
+                                <span className="fc-temp">{t.n(item.temp)}°C</span>
                                 <div className="fc-rain-bar">
                                     <div
                                         className="fc-rain-fill"
@@ -199,7 +199,7 @@ const WeatherDetailView = ({ weather, t }) => {
                                     ></div>
                                 </div>
                                 <span className="fc-rain-label">
-                                    <Droplet size={10} /> {item.chanceOfRain}%
+                                    <Droplet size={10} /> {t.n(item.chanceOfRain)}%
                                 </span>
                             </div>
                         ))}

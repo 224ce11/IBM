@@ -13,7 +13,7 @@ const WeatherCard = ({ data, t }) => {
             </div>
 
             <div className="temp-section">
-                <span className="temperature">{data.temp}°</span>
+                <span className="temperature">{t.n(data.temp)}°</span>
                 <span className="unit">C</span>
             </div>
 
@@ -27,17 +27,17 @@ const WeatherCard = ({ data, t }) => {
             <div className="weather-stats">
                 <div className="stat-item">
                     <Droplets size={20} />
-                    <span className="stat-value">{data.humidity}%</span>
+                    <span className="stat-value">{t.n(data.humidity)}%</span>
                     <span className="stat-label">{t('humidity')}</span>
                 </div>
                 <div className="stat-item">
                     <CloudRain size={20} />
-                    <span className="stat-value">{data.rainfall}mm</span>
+                    <span className="stat-value">{t.n(data.rainfall)}mm</span>
                     <span className="stat-label">{t('rainfall')}</span>
                 </div>
                 <div className="stat-item">
                     <Wind size={20} />
-                    <span className="stat-value">{data.windSpeed}</span>
+                    <span className="stat-value">{t.n(data.windSpeed)}</span>
                     <span className="stat-label">km/h</span>
                 </div>
             </div>

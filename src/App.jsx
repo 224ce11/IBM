@@ -34,7 +34,15 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isAppLoading, setIsAppLoading] = useState(true);
 
+  // Gujarati digit mapping
+  const GU_DIGITS = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+
   const t = (key) => translations[lang][key] || key;
+  // Attach number formatter: t.n(28) → '૨૮' in Gujarati, '28' in English
+  t.n = (val) => {
+    if (lang !== 'gu') return String(val);
+    return String(val).replace(/[0-9]/g, d => GU_DIGITS[d]);
+  };
 
   const toggleLang = () => {
     const newLang = lang === 'en' ? 'gu' : 'en';
@@ -184,7 +192,7 @@ function App() {
             <StatusRow t={t} weather={weather} soil={soil} />
             <SoilHealth t={t} soilData={soil} />
             <CropHealth t={t} weather={weather} soil={soil} />
-            <CropCalendar t={t} />
+            <CropCalendar t={t} soil={soil} weather={weather} />
             <ActionList t={t} />
           </>
         )}

@@ -175,7 +175,9 @@ export const translations = {
         "badge_off": "Off Season",
         "cal_sow_label": "Sow",
         "cal_grow_label": "Grow",
-        "cal_harvest_label": "Harvest"
+        "cal_harvest_label": "Harvest",
+        "cal_showing": "Showing",
+        "cal_crops_for_area": "crops suitable for your area"
     },
     gu: {
         app_name: "સ્માર્ટ કિસાન",
@@ -387,6 +389,8 @@ export const translations = {
         "badge_off": "બિન-ઋતુ",
         "cal_sow_label": "વાવણી",
         "cal_grow_label": "ઉગાડ",
-        "cal_harvest_label": "લણણી"
+        "cal_harvest_label": "લણણી",
+        "cal_showing": "બતાવે છે",
+        "cal_crops_for_area": "તમારા વિસ્તાર માટે યોગ્ય પાકો"
     }
 };

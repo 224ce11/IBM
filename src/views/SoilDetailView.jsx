@@ -21,7 +21,7 @@ const SoilDetailView = ({ soilData, weather, t }) => {
 
             {/* Crop Calendar — same as Home tab */}
             <div style={{ marginTop: '20px' }}>
-                <CropCalendar t={t} />
+                <CropCalendar t={t} soil={soilData} weather={weather} />
             </div>
 
             <div className="card-container" style={{ marginTop: '20px' }}>
