@@ -36,9 +36,10 @@ const MarketHome = ({ userLocation, onProductClick, t }) => {
             } else {
                 data = await getAllProducts(category === 'All' ? null : category);
             }
-            setProducts(data);
+            setProducts(data || []);
         } catch (err) {
-            console.error(err);
+            console.error('Failed to load products:', err);
+            setProducts([]);
         }
         setLoading(false);
     };

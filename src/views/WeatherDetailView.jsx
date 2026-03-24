@@ -6,14 +6,14 @@ import '../components/CardStyles.css';
 import './WeatherDetailView.css';
 
 /* ── Tiny custom tooltip ─────────────────────────── */
-const ChartTooltip = ({ active, payload, label }) => {
+const ChartTooltip = ({ active, payload, label, t }) => {
     if (!active || !payload?.length) return null;
     return (
         <div className="chart-tooltip">
             <p className="chart-tooltip-label">{label}</p>
             {payload.map((entry, i) => (
                 <p key={i} style={{ color: entry.color }} className="chart-tooltip-row">
-                    {entry.name}: <strong>{entry.value}{entry.name === 'Rain %' ? '%' : '°C'}</strong>
+                    {entry.name}: <strong>{t.n(entry.value)}{entry.name === (t('chance_of_rain') || 'Rain %') ? '%' : t('unit_temp')}</strong>
                 </p>
             ))}
         </div>
@@ -48,7 +48,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('feels_like')}</span>
-                            <span className="detail-value">{weather.feelsLike}°C</span>
+                            <span className="detail-value">{t.n(weather.feelsLike)}{t('unit_temp')}</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -57,7 +57,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('humidity')}</span>
-                            <span className="detail-value">{weather.humidity}%</span>
+                            <span className="detail-value">{t.n(weather.humidity)}%</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -66,7 +66,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('precipitation')}</span>
-                            <span className="detail-value">{weather.rainfall} mm</span>
+                            <span className="detail-value">{t.n(weather.rainfall)} {t('unit_rain')}</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -75,7 +75,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('wind_speed')}</span>
-                            <span className="detail-value">{weather.windSpeed} km/h</span>
+                            <span className="detail-value">{t.n(weather.windSpeed)} {t('unit_wind')}</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -84,7 +84,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('pressure')}</span>
-                            <span className="detail-value">{weather.pressure} hPa</span>
+                            <span className="detail-value">{t.n(weather.pressure)} {t('unit_pressure')}</span>
                         </div>
                     </div>
                     <div className="detail-item">
@@ -93,7 +93,7 @@ const WeatherDetailView = ({ weather, t }) => {
                         </div>
                         <div>
                             <span className="detail-label">{t('visibility')}</span>
-                            <span className="detail-value">{weather.visibility} km</span>
+                            <span className="detail-value">{t.n(weather.visibility)} {t('unit_visibility')}</span>
                         </div>
                     </div>
                 </div>
@@ -143,7 +143,7 @@ const WeatherDetailView = ({ weather, t }) => {
                                     domain={[0, 100]}
                                     hide
                                 />
-                                <Tooltip content={<ChartTooltip />} />
+                                <Tooltip content={<ChartTooltip t={t} />} />
                                 <Area
                                     yAxisId="temp"
                                     type="monotone"
@@ -169,11 +169,11 @@ const WeatherDetailView = ({ weather, t }) => {
                     <div className="chart-legend">
                         <span className="legend-item">
                             <span className="legend-dot" style={{ background: '#FF6B35' }}></span>
-                            {t('temperature') || 'Temperature'}
+                            {t('temperature')}
                         </span>
                         <span className="legend-item">
                             <span className="legend-dot" style={{ background: '#2196F3' }}></span>
-                            {t('chance_of_rain') || 'Chance of Rain'}
+                            {t('chance_of_rain')}
                         </span>
                     </div>
                 </div>
@@ -189,9 +189,9 @@ const WeatherDetailView = ({ weather, t }) => {
                     <div className="forecast-scroll">
                         {weather.forecast.map((item, index) => (
                             <div key={index} className="forecast-card">
-                                <span className="fc-time">{item.time}</span>
+                                <span className="fc-time">{t.n(item.time)}</span>
                                 <span className="fc-icon">{item.icon}</span>
-                                <span className="fc-temp">{item.temp}°C</span>
+                                <span className="fc-temp">{t.n(item.temp)}{t('unit_temp')}</span>
                                 <div className="fc-rain-bar">
                                     <div
                                         className="fc-rain-fill"
@@ -199,7 +199,7 @@ const WeatherDetailView = ({ weather, t }) => {
                                     ></div>
                                 </div>
                                 <span className="fc-rain-label">
-                                    <Droplet size={10} /> {item.chanceOfRain}%
+                                    <Droplet size={10} /> {t.n(item.chanceOfRain)}%
                                 </span>
                             </div>
                         ))}

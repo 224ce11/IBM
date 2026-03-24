@@ -185,28 +185,29 @@ const computeScore = (crop, weather, soil, t) => {
     if (ph < phMin) {
         const penalty = Math.min(30, Math.round((phMin - ph) * 15));
         score -= penalty;
-        reasons.push(`🧪 ${t('reason_ph_acidic')} (${ph}) — ${t('reason_ideal')} ${phMin}–${phMax}`);
+        reasons.push(`🧪 ${t('reason_ph_acidic')} (${t.n(ph)}) — ${t('reason_ideal')} ${t.n(phMin)}–${t.n(phMax)}`);
     } else if (ph > phMax) {
         const penalty = Math.min(25, Math.round((ph - phMax) * 12));
         score -= penalty;
-        reasons.push(`🧪 ${t('reason_ph_alkaline')} (${ph}) — ${t('reason_ideal')} ${phMin}–${phMax}`);
+        reasons.push(`🧪 ${t('reason_ph_alkaline')} (${t.n(ph)}) — ${t('reason_ideal')} ${t.n(phMin)}–${t.n(phMax)}`);
     } else {
-        positives.push(`🧪 ${t('reason_ph_ok')} (${ph})`);
+        positives.push(`🧪 ${t('reason_ph_ok')} (${t.n(ph)})`);
     }
 
     // 3. Temperature Check
     const temp = weather?.temp ?? 28;
     const [tMin, tMax] = config.idealTemp;
+    const unitTemp = t('unit_temp');
     if (temp < tMin) {
         const penalty = Math.min(25, Math.round((tMin - temp) * 3));
         score -= penalty;
-        reasons.push(`🌡 ${t('reason_too_cold')} (${temp}°C) — ${cropName} ${t('reason_needs')} ${tMin}–${tMax}°C`);
+        reasons.push(`🌡 ${t('reason_too_cold')} (${t.n(temp)}${unitTemp}) — ${cropName} ${t('reason_needs')} ${t.n(tMin)}–${t.n(tMax)}${unitTemp}`);
     } else if (temp > tMax) {
         const penalty = Math.min(25, Math.round((temp - tMax) * 3));
         score -= penalty;
-        reasons.push(`🌡 ${t('reason_heat_stress')} (${temp}°C) — ${cropName} ${t('reason_needs')} ${tMin}–${tMax}°C`);
+        reasons.push(`🌡 ${t('reason_heat_stress')} (${t.n(temp)}${unitTemp}) — ${cropName} ${t('reason_needs')} ${t.n(tMin)}–${t.n(tMax)}${unitTemp}`);
     } else {
-        positives.push(`🌡 ${t('reason_temp_ok')} (${temp}°C)`);
+        positives.push(`🌡 ${t('reason_temp_ok')} (${t.n(temp)}${unitTemp})`);
     }
 
     // 4. Moisture Check
@@ -215,13 +216,13 @@ const computeScore = (crop, weather, soil, t) => {
     if (moisture < mMin) {
         const penalty = Math.min(25, Math.round((mMin - moisture) * 0.8));
         score -= penalty;
-        reasons.push(`💧 ${t('reason_low_moisture')} (${moisture}%) — ${t('reason_needs')} ${mMin}–${mMax}%`);
+        reasons.push(`💧 ${t('reason_low_moisture')} (${t.n(moisture)}%) — ${t('reason_needs')} ${t.n(mMin)}–${t.n(mMax)}%`);
     } else if (moisture > mMax) {
         const penalty = Math.min(15, Math.round((moisture - mMax) * 0.4));
         score -= penalty;
-        reasons.push(`💧 ${t('reason_waterlogged')} (${moisture}%) — ${t('reason_ideal')} ≤${mMax}%`);
+        reasons.push(`💧 ${t('reason_waterlogged')} (${t.n(moisture)}%) — ${t('reason_ideal')} ≤${t.n(mMax)}%`);
     } else {
-        positives.push(`💧 ${t('reason_moisture_ok')} (${moisture}%)`);
+        positives.push(`💧 ${t('reason_moisture_ok')} (${t.n(moisture)}%)`);
     }
 
     // 5. Rainfall Check
@@ -229,7 +230,7 @@ const computeScore = (crop, weather, soil, t) => {
     if (rainfall > config.maxRainfall) {
         const penalty = Math.min(20, Math.round((rainfall - config.maxRainfall) * 0.5));
         score -= penalty;
-        reasons.push(`🌧 ${t('reason_heavy_rain')} (${rainfall}mm)`);
+        reasons.push(`🌧 ${t('reason_heavy_rain')} (${t.n(rainfall)}${t('unit_rain')})`);
     } else if (rainfall === 0 && moisture < 30) {
         score -= 10;
         reasons.push(`☀️ ${t('reason_no_rain_dry')}`);
@@ -239,20 +240,21 @@ const computeScore = (crop, weather, soil, t) => {
     const humidity = weather?.humidity ?? 60;
     if (humidity > 85) {
         score -= 10;
-        reasons.push(`🍄 ${t('reason_high_humidity')} (${humidity}%)`);
+        reasons.push(`🍄 ${t('reason_high_humidity')} (${t.n(humidity)}%)`);
     } else if (humidity > 70) {
         score -= 5;
-        reasons.push(`🍄 ${t('reason_elevated_humidity')} (${humidity}%)`);
+        reasons.push(`🍄 ${t('reason_elevated_humidity')} (${t.n(humidity)}%)`);
     }
 
     // 7. Wind stress check
     const wind = weather?.windSpeed ?? 10;
+    const unitWind = t('unit_wind');
     if (wind > 40) {
         score -= 15;
-        reasons.push(`💨 ${t('reason_strong_wind')} (${wind} km/h)`);
+        reasons.push(`💨 ${t('reason_strong_wind')} (${t.n(wind)} ${unitWind})`);
     } else if (wind > 25) {
         score -= 5;
-        reasons.push(`💨 ${t('reason_moderate_wind')} (${wind} km/h)`);
+        reasons.push(`💨 ${t('reason_moderate_wind')} (${t.n(wind)} ${unitWind})`);
     }
 
     score = Math.max(5, Math.min(100, Math.round(score)));

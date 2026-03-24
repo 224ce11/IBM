@@ -54,7 +54,7 @@ const AlertsView = ({ weather, soil, t }) => {
             newAlerts.push({
                 type: 'warning',
                 title: `💨 ${t('warning')} — ${t('wind_speed')}`,
-                message: `${t('wind_speed')}: ${windSpeed} km/h. ${t('tip_wind')}`,
+                message: `${t('wind_speed')}: ${t.n(windSpeed)} ${t('unit_wind')}. ${t('tip_wind')}`,
                 icon: <Wind size={24} color="#F57C00" />
             });
         }
@@ -64,7 +64,7 @@ const AlertsView = ({ weather, soil, t }) => {
             newAlerts.push({
                 type: 'danger',
                 title: `⛈ ${t('storm_alert')}`,
-                message: `${t('rainfall')}: ${rainfall}mm. ${t('tip_storm')}`,
+                message: `${t('rainfall')}: ${t.n(rainfall)}${t('unit_rain')}. ${t('tip_storm')}`,
                 icon: <CloudLightning size={24} color="#D32F2F" />
             });
         }
@@ -93,7 +93,7 @@ const AlertsView = ({ weather, soil, t }) => {
         if (soil && (ph < 5.5 || ph > 8.0)) {
             newAlerts.push({
                 type: 'warning',
-                title: `🧪 ${t('alert_ph_title')} (${ph})`,
+                title: `🧪 ${t('alert_ph_title')} (${t.n(ph)})`,
                 message: ph < 5.5 ? t('alert_ph_acidic') : t('alert_ph_alkaline'),
                 icon: <Info size={24} color="#F57C00" />
             });
@@ -208,7 +208,7 @@ const AlertsView = ({ weather, soil, t }) => {
                 <div style={{ marginBottom: '16px', padding: '10px 14px', background: 'rgba(230, 81, 0, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px', border: '1px solid rgba(230, 81, 0, 0.2)' }}>
                     <AlertTriangle size={18} color="#E65100" />
                     <span style={{ fontSize: '13px', color: '#E65100', fontWeight: 600 }}>
-                        {alerts.filter(a => a.type === 'danger').length} critical, {alerts.filter(a => a.type === 'warning').length} warnings active
+                        {t.n(alerts.filter(a => a.type === 'danger').length)} {t('critical')}, {t.n(alerts.filter(a => a.type === 'warning').length)} {t('warning')}
                     </span>
                 </div>
             )}

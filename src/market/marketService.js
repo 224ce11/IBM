@@ -4,6 +4,11 @@ import {
     updateDoc, deleteDoc, query, where, serverTimestamp
 } from 'firebase/firestore';
 
+function requireDb() {
+    if (!db) throw new Error('Firebase is not configured. Please add environment variables.');
+    return db;
+}
+
 // ─── Haversine Distance (km) ───────────────────────────────────────────────
 export function haversineDistance(lat1, lng1, lat2, lng2) {
     const R = 6371;

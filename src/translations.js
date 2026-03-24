@@ -255,7 +255,15 @@ export const translations = {
                 "market_creating": "Creating account...",
                 "market_logging_in": "Logging in...",
                 "market_no_account": "Don't have an account? Register",
-                "market_seed_done": "Loaded!"
+                "market_seed_done": "Loaded!",
+
+                // Units
+                "unit_temp": "°C",
+                "unit_wind": "km/h",
+                "unit_rain": "mm",
+                "unit_pressure": "hPa",
+                "unit_visibility": "km",
+                "nitrogen": "Nitrogen"
         },
         hi: {
                 app_name: "स्मार्ट किसान",
@@ -512,7 +520,15 @@ export const translations = {
                 "market_creating": "खाता बनाया जा रहा है...",
                 "market_logging_in": "लॉग इन किया जा रहा है...",
                 "market_no_account": "खाता नहीं है? रजिस्टर करें",
-                "market_seed_done": "लोड हो गया!"
+                "market_seed_done": "लोड हो गया!",
+
+                // Units
+                "unit_temp": "°C",
+                "unit_wind": "किमी/घंटा",
+                "unit_rain": "मिमी",
+                "unit_pressure": "hPa",
+                "unit_visibility": "किमी",
+                "nitrogen": "नाइट्रोजन"
         },
         gu: {
                 app_name: "સ્માર્ટ કિસાન",
@@ -803,7 +819,15 @@ export const translations = {
                 "market_create_account": "ખાતું બનાવો",
                 "market_creating": "ખાતું બની રહ્યું છે...",
                 "market_logging_in": "લૉગ ઇન થઈ રહ્યો છે...",
-                "market_no_account": "ખાતું નથી? નોંધણી કરો",
-                "market_seed_done": "લૉડ થઈ ગયું!"
+                "market_no_account": "ખાતું નથી? રજીસ્ટર કરો",
+                "market_seed_done": "લોડ થઈ ગયું!",
+
+                // Units
+                "unit_temp": "°C",
+                "unit_wind": "કિમી/કલાક",
+                "unit_rain": "મીમી",
+                "unit_pressure": "hPa",
+                "unit_visibility": "કિમી",
+                "nitrogen": "નાઈટ્રોજન"
         }
 };
